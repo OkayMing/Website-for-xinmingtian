@@ -1,1879 +1,411 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>EcoMin - 爱文闽智能再生资源回收平台</title>
-    <!-- Tailwind CSS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>垃圾分类管理系统</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Three.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- GSAP 动画库 -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
-    <!-- Particles.js -->
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
-        
-        :root {
-            --primary-color: #0A2463;
-            --secondary-color: #0070F3;
-            --accent-color: #00C6FF;
-            --dark-green: #2E7D32;
-            --light-green: #81C784;
-            --dark-blue: #0047AB;
-            --light-blue: #64B5F6;
-            --text-dark: #333333;
-            --text-light: #FFFFFF;
-            --bg-light: #F5F7FA;
-            --bg-dark: #121212;
-            --tech-gradient: linear-gradient(135deg, #0A2463, #0070F3, #00C6FF);
-        }
-        
-        html {
-            scroll-behavior: smooth;
-        }
-        
-        body {
-            font-family: 'Noto Sans SC', sans-serif;
-            color: var(--text-dark);
-            overflow-x: hidden;
-        }
-        
-        .hero-section {
-            background: var(--tech-gradient);
-            min-height: 100vh;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .hero-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
-            opacity: 0.8;
-        }
-        
-        .nav-link {
-            position: relative;
-            transition: all 0.3s ease;
-        }
-        
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: var(--accent-color);
-            transition: width 0.3s ease;
-        }
-        
-        .nav-link:hover::after {
-            width: 100%;
-        }
-        
-        .service-card {
-            transition: all 0.3s ease;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            position: relative;
-            background: white;
-            z-index: 1;
-        }
-        
-        .service-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: var(--tech-gradient);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.3s ease;
-            z-index: -1;
-        }
-        
-        .service-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-        }
-        
-        .service-card:hover::before {
-            transform: scaleX(1);
-        }
-        
-        .process-step {
-            position: relative;
-            padding: 2rem 1.5rem;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: hidden;
-        }
-        
-        .process-step::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, transparent, var(--tech-gradient), transparent);
-            transform: translateX(-100%);
-            transition: transform 0.6s ease;
-        }
-        
-        .process-step:hover::before {
-            transform: translateX(100%);
-        }
-        
-        .process-step:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-        }
-        
-        .process-step::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            right: -50%;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
-            transform: translateY(-50%);
-            z-index: -1;
-            opacity: 0.6;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
-        }
-        
-        .process-step:last-child::after {
-            display: none;
-        }
-        
-        .process-icon {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            margin: 0 auto 20px;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-        }
-        
-        .process-icon::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.6s ease;
-        }
-        
-        .process-step:hover .process-icon {
-            transform: scale(1.1) rotateY(180deg);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.25);
-        }
-        
-        .process-step:hover .process-icon::before {
-            left: 100%;
-        }
-        
-        /* 3D流程节点样式 */
-        .process-node {
-            position: relative;
-        }
-        
-        .process-node-icon {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            z-index: 10;
-            position: relative;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .process-node-icon::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transition: left 0.6s ease;
-        }
-        
-        .process-node:hover .process-node-icon {
-            transform: scale(1.2) rotateY(180deg);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-        }
-        
-        .process-node:hover .process-node-icon::before {
-            left: 100%;
-        }
-        
-        /* 响应式调整 */
-        @media (max-width: 768px) {
-            .process-node .flex {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            .process-node .w-1/2 {
-                width: 100%;
-                padding: 0;
-                margin-bottom: 1rem;
-            }
-            
-            .process-node .order-1 {
-                order: 2;
-            }
-            
-            .process-node .order-2 {
-                order: 1;
-                margin-bottom: 1rem;
-            }
-            
-            .process-node .order-3 {
-                order: 3;
-            }
-        }
-        
-        .news-card {
-            transition: all 0.3s ease;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        
-        .news-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-        }
-        
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: all 0.6s ease;
-            z-index: -1;
-        }
-        
-        .btn-primary:hover::before {
-            left: 100%;
-        }
-        
-        .btn-primary:hover {
-            background-color: var(--dark-blue);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-        
-        .btn-secondary {
-            background-color: var(--secondary-color);
-            color: white;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-secondary:hover {
-            background-color: var(--dark-blue);
-            transform: translateY(-2px);
-        }
-        
-        .btn-accent {
-            background-color: var(--accent-color);
-            color: white;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-accent:hover {
-            background-color: #F57C00;
-            transform: translateY(-2px);
-        }
-        
-        #model-container {
-            width: 100%;
-            height: 400px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        
-        .stat-card {
-            text-align: center;
-            padding: 20px;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-            position: relative;
-            display: inline-block;
-        }
-        
-        .stat-number::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: var(--tech-gradient);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.3s ease;
-        }
-        
-        .stat-card:hover .stat-number::after {
-            transform: scaleX(1);
-        }
-        
-        .stat-label {
-            font-size: 1.1rem;
-            color: var(--text-dark);
-        }
-        
-        .footer {
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-        }
-        
-        .footer-link {
-            color: var(--text-light);
-            transition: all 0.3s ease;
-        }
-        
-        .footer-link:hover {
-            color: var(--accent-color);
-        }
-        
-        .social-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: rgba(30, 41, 59, 0.7);
-            color: white;
-            margin-right: 10px;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-        }
-        
-        .social-icon:hover {
-            background-color: #3b82f6;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
-        }
-        
-        /* 响应式设计 */
-        @media (max-width: 768px) {
-            .process-step::after {
-                display: none;
-            }
-            
-            .mobile-menu {
-                display: none;
-            }
-            
-            .mobile-menu.active {
-                display: flex;
-            }
-        }
-        
-        /* 动画类 */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-        
-        .fade-in.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        /* 3D模型控制按钮 */
-        .model-controls {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 10px;
-            z-index: 10;
-        }
-        
-        .model-btn {
-            background-color: rgba(255, 255, 255, 0.8);
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .model-btn:hover {
-            background-color: white;
-            transform: scale(1.1);
-        }
-        
-
-        
-        .message {
-            max-width: 80%;
-            padding: 10px 15px;
-            border-radius: 20px;
-            margin-bottom: 5px;
-        }
-        
-        .user-message {
-            background-color: var(--light-blue);
-            color: white;
-            align-self: flex-end;
-            border-bottom-right-radius: 5px;
-        }
-        
-        .ai-message {
-            background-color: #f1f1f1;
-            color: var(--text-dark);
-            align-self: flex-start;
-            border-bottom-left-radius: 5px;
-        }
-        
-        /* 加载动画 */
-        .loading {
-            display: inline-block;
-            position: relative;
-            width: 80px;
-            height: 80px;
-        }
-        
-        .loading div {
-            position: absolute;
-            top: 33px;
-            width: 13px;
-            height: 13px;
-            border-radius: 50%;
-            background: var(--primary-color);
-            animation-timing-function: cubic-bezier(0, 1, 1, 0);
-        }
-        
-        .loading div:nth-child(1) {
-            left: 8px;
-            animation: loading1 0.6s infinite;
-        }
-        
-        .loading div:nth-child(2) {
-            left: 8px;
-            animation: loading2 0.6s infinite;
-        }
-        
-        .loading div:nth-child(3) {
-            left: 32px;
-            animation: loading2 0.6s infinite;
-        }
-        
-        .loading div:nth-child(4) {
-            left: 56px;
-            animation: loading3 0.6s infinite;
-        }
-        
-        @keyframes loading1 {
-            0% {
-                transform: scale(0);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-        
-        @keyframes loading3 {
-            0% {
-                transform: scale(1);
-            }
-            100% {
-                transform: scale(0);
-            }
-        }
-        
-        @keyframes loading2 {
-            0% {
-                transform: translate(0, 0);
-            }
-            100% {
-                transform: translate(24px, 0);
-            }
-        }
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.544.0/dist/umd/lucide.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="./src/css/style.css">
 </head>
-<body>
-    <!-- 导航栏 -->
-    <nav class="bg-gray-900/95 backdrop-blur-sm shadow-lg fixed w-full z-50 border-b border-blue-500/20">
-        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-3">
-            <div class="flex justify-between items-center">
-                <div class="flex items-center space-x-3">
-                    <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/da994b6e36e24ebfa07a4637ed5fa97e~tplv-a9rns2rl98-image.image?rcl=20251215092540875000DF74F5CD5937C0&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1768353961&x-signature=q7%2BF%2BpT8w4o8JcWqaulZhWmW7GM%3D" alt="爱文闽" class="h-10 w-10 object-contain">
-                    <div>
-                        <span class="text-xl font-bold bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">爱文闽 <span class="text-blue-400 font-normal">EcoMin</span></span>
-                        <p class="text-xs text-gray-400">智能再生资源回收</p>
-                    </div>
-                </div>
-                
-                <!-- 桌面导航 -->
-                <div class="hidden md:flex items-center space-x-1">
-                    <a href="#home" class="nav-link px-4 py-2 text-gray-300 hover:text-white hover:bg-blue-600/10 rounded-md transition-all duration-300">首页</a>
-                    <a href="#about" class="nav-link px-4 py-2 text-gray-300 hover:text-white hover:bg-blue-600/10 rounded-md transition-all duration-300">关于我们</a>
-                    <a href="#services" class="nav-link px-4 py-2 text-gray-300 hover:text-white hover:bg-blue-600/10 rounded-md transition-all duration-300">服务项目</a>
-                    <a href="#process" class="nav-link px-4 py-2 text-gray-300 hover:text-white hover:bg-blue-600/10 rounded-md transition-all duration-300">回收流程</a>
-                    <a href="#equipment" class="nav-link px-4 py-2 text-gray-300 hover:text-white hover:bg-blue-600/10 rounded-md transition-all duration-300">智能设备</a>
-                    <a href="#news" class="nav-link px-4 py-2 text-gray-300 hover:text-white hover:bg-blue-600/10 rounded-md transition-all duration-300">新闻动态</a>
-                    <a href="#contact" class="nav-link px-4 py-2 text-gray-300 hover:text-white hover:bg-blue-600/10 rounded-md transition-all duration-300">联系我们</a>
-                    <div class="h-6 border-l border-gray-700 mx-2"></div>
-                    <div class="flex items-center space-x-1">
-                        <a href="#" class="px-2 py-1 text-sm text-white font-medium bg-blue-600/20 rounded-md">中</a>
-                        <a href="#" class="px-2 py-1 text-sm text-gray-400 hover:text-white rounded-md transition-colors">EN</a>
-                    </div>
-
-                </div>
-                
-                <!-- 移动端菜单按钮 -->
-                <div class="md:hidden">
-                    <button id="mobile-menu-button" class="text-gray-300 hover:text-white focus:outline-none p-2 rounded-md hover:bg-gray-800 transition-colors">
-                        <i class="fas fa-bars text-2xl"></i>
-                    </button>
-                </div>
+<body class="flex h-screen flex-col">
+    <!-- Header -->
+    <header class="bg-indigo-600 h-16 flex items-center justify-between px-6 z-10 shadow-md transition-all duration-300">
+        <div class="flex items-center items-center space-x-3">
+            <div class="bg-white/10 p-2 rounded-lg">
+                <i data-lucide="trash-2" class="text-white h-6 w-6"></i>
             </div>
-            
-            <!-- 移动端导航菜单 -->
-            <div id="mobile-menu" class="mobile-menu flex-col space-y-2 py-4 mt-2 hidden">
-                <a href="#home" class="text-gray-300 hover:text-white hover:bg-blue-600/10 block px-4 py-3 rounded-md transition-colors">首页</a>
-                <a href="#about" class="text-gray-300 hover:text-white hover:bg-blue-600/10 block px-4 py-3 rounded-md transition-colors">关于我们</a>
-                <a href="#services" class="text-gray-300 hover:text-white hover:bg-blue-600/10 block px-4 py-3 rounded-md transition-colors">服务项目</a>
-                <a href="#process" class="text-gray-300 hover:text-white hover:bg-blue-600/10 block px-4 py-3 rounded-md transition-colors">回收流程</a>
-                <a href="#equipment" class="text-gray-300 hover:text-white hover:bg-blue-600/10 block px-4 py-3 rounded-md transition-colors">智能设备</a>
-                <a href="#news" class="text-gray-300 hover:text-white hover:bg-blue-600/10 block px-4 py-3 rounded-md transition-colors">新闻动态</a>
-                <a href="#contact" class="text-gray-300 hover:text-white hover:bg-blue-600/10 block px-4 py-3 rounded-md transition-colors">联系我们</a>
-                <div class="border-t border-gray-800 my-3"></div>
-                <div class="flex items-center justify-between px-4 py-2">
-                    <span class="text-sm text-gray-400">语言选择:</span>
-                    <div class="flex items-center space-x-2">
-                        <a href="#" class="px-3 py-1 text-sm text-white font-medium bg-blue-600/20 rounded-md">中文</a>
-                        <a href="#" class="px-3 py-1 text-sm text-gray-400 hover:text-white rounded-md transition-colors">English</a>
-                    </div>
-                </div>
-
-            </div>
+            <h1 class="text-white text-xl font-semibold">垃圾分类管理系统</h1>
         </div>
-    </nav>
-
-    <!-- 英雄区域 -->
-    <section id="home" class="hero-section flex items-center justify-center relative">
-        <div id="particles-js" class="absolute inset-0 z-0"></div>
-        <div class="container mx-auto px-4 py-20 relative z-10">
-            <div class="flex flex-col md:flex-row items-center">
-                <div class="w-full md:w-1/2 text-white mb-10 md:mb-0">
-                    <div class="inline-block bg-white bg-opacity-10 backdrop-filter backdrop-blur-lg px-4 py-2 rounded-full text-sm font-medium mb-4">
-                        科技赋能 · 绿色未来
-                    </div>
-                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight">
-                        <span class="block">智能回收</span>
-                        <span class="block mt-2">科技引领未来</span>
-                    </h1>
-                    <p class="text-xl mb-8 opacity-90 max-w-lg">爱文闽 EcoMin 融合AI智能识别与大数据分析技术，提供高效、精准的再生资源回收解决方案。</p>
-                    <div class="flex flex-wrap gap-4">
-                        <a href="#services" class="btn-primary px-8 py-4 rounded-md font-medium text-lg">
-                            <i class="fas fa-arrow-right mr-2"></i> 探索解决方案
-                        </a>
-                    </div>
-                </div>
-                <div class="w-full md:w-1/2">
-                    <div class="relative">
-                        <div class="absolute -inset-0.5 bg-gradient-to-r from-blue-600 to-cyan-400 rounded-lg blur opacity-75"></div>
-                        <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/f994869f49b44b95ac7c6005c88743c7~tplv-a9rns2rl98-image.image?rcl=20251215091844BB10D8384ED0DD03A4CB&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1768353580&x-signature=Ir4kFU9n6107yDZhwDoxPTHrR0w%3D" alt="智能回收站" class="w-full rounded-lg shadow-2xl relative z-10">
-                        <div class="absolute -bottom-4 -right-4 bg-white p-4 rounded-lg shadow-lg z-20">
-                            <div class="text-sm font-bold text-blue-900">AI识别准确率</div>
-                            <div class="text-2xl font-bold text-blue-600">99.8%</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 数据统计 -->
-    <section class="py-10 bg-white relative overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-r from-blue-50 to-indigo-50 opacity-50"></div>
-        <div class="container mx-auto px-4 relative z-10">
-            <div class="text-center mb-10">
-                <h2 class="text-2xl sm:text-3xl font-bold text-blue-900 mb-2">数据驱动 · 智慧回收</h2>
-                <p class="text-gray-600">通过大数据分析，实现回收效率最大化</p>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="w-full stat-card bg-white shadow-md rounded-xl border border-gray-100 p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-                            <i class="fas fa-map-marker-alt text-blue-600"></i>
-                        </div>
-                        <div class="text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded-full">
-                            同比增长 24%
-                        </div>
-                    </div>
-                    <div class="stat-number" id="stat-1">0</div>
-                    <div class="stat-label text-gray-600">智能回收站点</div>
-                </div>
-                <div class="w-full stat-card bg-white shadow-md rounded-xl border border-gray-100 p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-                            <i class="fas fa-recycle text-blue-500"></i>
-                        </div>
-                        <div class="text-xs font-semibold text-blue-500 bg-blue-50 px-2 py-1 rounded-full">
-                            同比增长 32%
-                        </div>
-                    </div>
-                    <div class="stat-number" id="stat-2">0</div>
-                    <div class="stat-label text-gray-600">资源回收吨数</div>
-                </div>
-                <div class="w-full stat-card bg-white shadow-md rounded-xl border border-gray-100 p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
-                            <i class="fas fa-users text-purple-600"></i>
-                        </div>
-                        <div class="text-xs font-semibold text-purple-600 bg-purple-50 px-2 py-1 rounded-full">
-                            同比增长 45%
-                        </div>
-                    </div>
-                    <div class="stat-number" id="stat-3">0</div>
-                    <div class="stat-label text-gray-600">活跃用户</div>
-                </div>
-                <div class="w-full stat-card bg-white shadow-md rounded-xl border border-gray-100 p-6">
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="w-10 h-10 rounded-full bg-cyan-100 flex items-center justify-center">
-                            <i class="fas fa-leaf text-cyan-600"></i>
-                        </div>
-                        <div class="text-xs font-semibold text-cyan-600 bg-cyan-50 px-2 py-1 rounded-full">
-                            同比增长 29%
-                        </div>
-                    </div>
-                    <div class="stat-number" id="stat-4">0</div>
-                    <div class="stat-label text-gray-600">减少碳排放(吨)</div>
-                </div>
-            </div>
-            
-            <!-- 数据可视化图表 -->
-            <div class="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <div class="w-full bg-white p-6 rounded-xl shadow-md">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">月度回收量趋势</h3>
-                    <div class="h-64">
-                        <canvas id="recyclingChart"></canvas>
-                    </div>
-                </div>
-                <div class="w-full bg-white p-6 rounded-xl shadow-md">
-                    <h3 class="text-lg font-semibold text-gray-800 mb-4">回收物类型分布</h3>
-                    <div class="h-64">
-                        <canvas id="distributionChart"></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 关于我们 -->
-    <section id="about" class="py-20 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">关于我们</h2>
-                <div class="w-24 h-1 bg-blue-600 mx-auto mb-6"></div>
-                <p class="text-gray-600 max-w-3xl mx-auto">爱文闽是一家专注于智能再生资源回收的科技企业，致力于通过创新技术和优质服务，推动资源循环利用，建设美丽福建。</p>
-            </div>
-            
-            <div class="flex flex-col md:flex-row items-center">
-                <div class="w-full md:w-1/2 mb-10 md:mb-0">
-                    <img src="https://p3-doubao-search-sign.byteimg.com/labis/59ccb7691a71fd24db7185a2e7962a4f~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1781313558&x-signature=uz%2FFMxNVhzor%2BzJ6kVThUT3ln64%3D" alt="关于我们" class="w-full rounded-lg shadow-lg">
-                </div>
-                <div class="w-full md:w-1/2 md:pl-12">
-                    <h3 class="text-2xl font-bold mb-6 text-blue-500">我们的使命</h3>
-                    <p class="text-gray-700 mb-6">通过智能回收技术，实现资源的高效循环利用，减少环境污染，推动可持续发展，为建设美丽中国贡献力量。</p>
-                    
-                    <h3 class="text-2xl font-bold mb-6 text-blue-500">核心价值观</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                        <div class="flex items-start">
-                            <div class="bg-blue-100 p-3 rounded-full mr-4">
-                                <i class="fas fa-leaf text-blue-500"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold mb-2">环保先行</h4>
-                                <p class="text-gray-600">将环保理念融入每一项业务和服务中</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start">
-                            <div class="bg-blue-100 p-3 rounded-full mr-4">
-                                <i class="fas fa-lightbulb text-blue-500"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold mb-2">创新驱动</h4>
-                                <p class="text-gray-600">不断探索和应用新技术，提升回收效率</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start">
-                            <div class="bg-blue-100 p-3 rounded-full mr-4">
-                                <i class="fas fa-handshake text-blue-500"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold mb-2">合作共赢</h4>
-                                <p class="text-gray-600">与合作伙伴建立长期互利的合作关系</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start">
-                            <div class="bg-blue-100 p-3 rounded-full mr-4">
-                                <i class="fas fa-users text-blue-500"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold mb-2">服务至上</h4>
-                                <p class="text-gray-600">以用户需求为中心，提供优质便捷的服务</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <a href="#contact" class="btn-primary inline-block px-6 py-3 rounded-md font-medium">了解更多</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 服务项目 -->
-    <section id="services" class="py-20 bg-gradient-to-b from-white to-blue-50">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">服务项目</h2>
-                <div class="w-24 h-1 bg-blue-600 mx-auto mb-6"></div>
-                <p class="text-gray-600 max-w-3xl mx-auto">我们提供全方位的再生资源回收服务，满足不同客户的需求，共同推动资源循环利用。</p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- 服务卡片 1 -->
-                <div class="w-full service-card bg-white">
-                    <div class="h-48 bg-blue-100 flex items-center justify-center">
-                        <i class="fas fa-recycle text-6xl text-blue-500"></i>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-3">智能垃圾分类回收</h3>
-                        <p class="text-gray-600 mb-4">通过智能回收设备，实现垃圾的自动分类和回收，提高回收效率和准确性。</p>
-                        <a href="#" class="text-blue-500 hover:text-blue-700 font-medium flex items-center">
-                            了解更多 <i class="fas fa-arrow-right ml-2"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- 服务卡片 2 -->
-                <div class="w-full service-card bg-white">
-                    <div class="h-48 bg-blue-100 flex items-center justify-center">
-                        <i class="fas fa-industry text-6xl text-blue-600"></i>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-3">工业废料回收处理</h3>
-                        <p class="text-gray-600 mb-4">为工业企业提供专业的废料回收和处理服务，减少环境污染，降低企业成本。</p>
-                        <a href="#" class="text-blue-600 hover:text-blue-800 font-medium flex items-center">
-                            了解更多 <i class="fas fa-arrow-right ml-2"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- 服务卡片 3 -->
-                <div class="w-full service-card bg-white">
-                    <div class="h-48 bg-yellow-100 flex items-center justify-center">
-                        <i class="fas fa-mobile-alt text-6xl text-yellow-600"></i>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-3">电子产品回收</h3>
-                        <p class="text-gray-600 mb-4">专业回收各类废旧电子产品，进行环保处理和资源再利用，防止电子污染。</p>
-                        <a href="#" class="text-yellow-600 hover:text-yellow-800 font-medium flex items-center">
-                            了解更多 <i class="fas fa-arrow-right ml-2"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- 服务卡片 4 -->
-                <div class="w-full service-card bg-white">
-                    <div class="h-48 bg-red-100 flex items-center justify-center">
-                        <i class="fas fa-truck text-6xl text-red-600"></i>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-3">上门回收服务</h3>
-                        <p class="text-gray-600 mb-4">为企业和个人提供便捷的上门回收服务，节省客户时间和精力。</p>
-                        <a href="#" class="text-red-600 hover:text-red-800 font-medium flex items-center">
-                            了解更多 <i class="fas fa-arrow-right ml-2"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- 服务卡片 5 -->
-                <div class="w-full service-card bg-white">
-                    <div class="h-48 bg-purple-100 flex items-center justify-center">
-                        <i class="fas fa-chart-line text-6xl text-purple-600"></i>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-3">回收数据分析</h3>
-                        <p class="text-gray-600 mb-4">通过大数据分析，为客户提供回收数据报告和优化建议，提升回收效果。</p>
-                        <a href="#" class="text-purple-600 hover:text-purple-800 font-medium flex items-center">
-                            了解更多 <i class="fas fa-arrow-right ml-2"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- 服务卡片 6 -->
-                <div class="w-full service-card bg-white">
-                    <div class="h-48 bg-indigo-100 flex items-center justify-center">
-                        <i class="fas fa-graduation-cap text-6xl text-indigo-600"></i>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold mb-3">环保教育宣传</h3>
-                        <p class="text-gray-600 mb-4">开展环保知识宣传和教育活动，提高公众环保意识，促进垃圾分类。</p>
-                        <a href="#" class="text-indigo-600 hover:text-indigo-800 font-medium flex items-center">
-                            了解更多 <i class="fas fa-arrow-right ml-2"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 回收流程 -->
-    <section id="process" class="py-20 bg-white relative overflow-hidden">
-        <div class="absolute inset-0 bg-gradient-to-br from-blue-50 to-green-50 opacity-30"></div>
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">回收流程</h2>
-                <div class="w-24 h-1 bg-blue-600 mx-auto mb-6"></div>
-                <p class="text-gray-600 max-w-3xl mx-auto">我们的回收流程简单高效，让您轻松参与环保行动，共同建设美丽家园。</p>
-            </div>
-            
+        <div class="flex items-center space-x-4 text-white">
+            <!-- Notifications -->
             <div class="relative">
-                <div class="flex flex-col md:flex-row justify-between items-center relative z-10">
-                    <!-- 步骤 1 -->
-                    <div class="process-step w-full md:w-1/5 mb-10 md:mb-0 text-center group">
-                        <div class="process-icon bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg group-hover:shadow-xl">
-                            <i class="fas fa-trash-alt text-3xl"></i>
-                        </div>
-                        <h3 class="text-xl font-bold mb-3 text-blue-900 group-hover:text-blue-700 transition-colors duration-300">分类收集</h3>
-                        <p class="text-gray-600 group-hover:text-gray-800 transition-colors duration-300">将废旧物品按照分类要求进行初步分类，便于后续处理。</p>
-                        <div class="absolute -bottom-5 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg">
-                            <i class="fas fa-arrow-down text-blue-500"></i>
-                        </div>
-                    </div>
-                    
-                    <!-- 步骤 2 -->
-                    <div class="process-step w-full md:w-1/5 mb-10 md:mb-0 text-center group">
-                        <div class="process-icon bg-gradient-to-br from-green-500 to-green-600 shadow-lg group-hover:shadow-xl">
-                            <i class="fas fa-truck-loading text-3xl"></i>
-                        </div>
-                        <h3 class="text-xl font-bold mb-3 text-green-900 group-hover:text-green-700 transition-colors duration-300">回收运输</h3>
-                        <p class="text-gray-600 group-hover:text-gray-800 transition-colors duration-300">通过智能回收设备或上门服务，将分类后的物品收集并运输到处理中心。</p>
-                        <div class="absolute -bottom-5 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg">
-                            <i class="fas fa-arrow-down text-green-500"></i>
-                        </div>
-                    </div>
-                    
-                    <!-- 步骤 3 -->
-                    <div class="process-step w-full md:w-1/5 mb-10 md:mb-0 text-center group">
-                        <div class="process-icon bg-gradient-to-br from-purple-500 to-purple-600 shadow-lg group-hover:shadow-xl">
-                            <i class="fas fa-sort-amount-down-alt text-3xl"></i>
-                        </div>
-                        <h3 class="text-xl font-bold mb-3 text-purple-900 group-hover:text-purple-700 transition-colors duration-300">专业分拣</h3>
-                        <p class="text-gray-600 group-hover:text-gray-800 transition-colors duration-300">在处理中心进行专业分拣，进一步提高回收物品的纯度和利用价值。</p>
-                        <div class="absolute -bottom-5 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg">
-                            <i class="fas fa-arrow-down text-purple-500"></i>
-                        </div>
-                    </div>
-                    
-                    <!-- 步骤 4 -->
-                    <div class="process-step w-full md:w-1/5 mb-10 md:mb-0 text-center group">
-                        <div class="process-icon bg-gradient-to-br from-yellow-500 to-yellow-600 shadow-lg group-hover:shadow-xl">
-                            <i class="fas fa-cogs text-3xl"></i>
-                        </div>
-                        <h3 class="text-xl font-bold mb-3 text-yellow-900 group-hover:text-yellow-700 transition-colors duration-300">加工处理</h3>
-                        <p class="text-gray-600 group-hover:text-gray-800 transition-colors duration-300">对分拣后的物品进行加工处理，转化为可再利用的原材料。</p>
-                        <div class="absolute -bottom-5 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg">
-                            <i class="fas fa-arrow-down text-yellow-500"></i>
-                        </div>
-                    </div>
-                    
-                    <!-- 步骤 5 -->
-                    <div class="process-step w-full md:w-1/5 text-center group">
-                        <div class="process-icon bg-gradient-to-br from-cyan-500 to-cyan-600 shadow-lg group-hover:shadow-xl">
-                            <i class="fas fa-recycle text-3xl"></i>
-                        </div>
-                        <h3 class="text-xl font-bold mb-3 text-cyan-900 group-hover:text-cyan-700 transition-colors duration-300">循环利用</h3>
-                        <p class="text-gray-600 group-hover:text-gray-800 transition-colors duration-300">处理后的原材料被送到相关企业，用于生产新的产品，实现资源循环利用。</p>
-                        <div class="absolute -bottom-5 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg">
-                            <i class="fas fa-check text-cyan-500"></i>
-                        </div>
-                    </div>
-                </div>
+                <button class="p-2 rounded-full hover:bg-indigo-700 transition-colors duration-200 relative">
+                    <i data-lucide="bell" class="h-5 w-5"></i>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+                </button>
             </div>
-            
-            <!-- 交互式3D流程展示 -->
-            <div class="mt-16 relative z-10">
-                <div class="bg-white rounded-2xl shadow-xl p-8 overflow-hidden relative">
-                    <div class="absolute inset-0 bg-gradient-to-br from-blue-50 to-green-50 opacity-50"></div>
-                    
-                    <!-- 3D流程容器 -->
-                    <div class="relative z-10">
-                        <h3 class="text-2xl font-bold text-center mb-12 text-blue-900">智能回收全流程</h3>
-                        
-                        <!-- 3D流程线 -->
-                        <div class="relative">
-                            <!-- 流程轨道 -->
-                            <div class="absolute left-1/2 top-0 bottom-0 w-2 bg-gradient-to-b from-blue-500 via-green-500 to-cyan-500 transform -translate-x-1/2 rounded-full"></div>
-                            
-                            <!-- 流程节点 -->
-                            <div class="space-y-24">
-                                <!-- 节点1 -->
-                                <div class="process-node">
-                                    <div class="flex items-center">
-                                        <div class="w-1/2 pr-12 text-right">
-                                            <div class="bg-blue-50 p-6 rounded-xl shadow-md transform transition-all duration-500 hover:scale-105 hover:shadow-lg">
-                                                <h4 class="text-xl font-bold text-blue-900 mb-3">智能识别分类</h4>
-                                                <p class="text-gray-700">AI视觉识别系统自动识别不同类型的回收物，准确率达99.8%</p>
-                                                <div class="mt-4 flex justify-end">
-                                                    <span class="text-sm font-semibold text-blue-600 bg-blue-100 px-3 py-1 rounded-full">AI驱动</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="process-node-icon bg-blue-500 shadow-lg shadow-blue-500/30">
-                                            <i class="fas fa-robot text-2xl"></i>
-                                        </div>
-                                        <div class="w-1/2 pl-12">
-                                            <div class="bg-gradient-to-r from-blue-500 to-blue-600 w-32 h-32 rounded-xl flex items-center justify-center shadow-lg transform transition-all duration-500 hover:scale-110 hover:rotate-y-180">
-                                                <i class="fas fa-qrcode text-white text-5xl"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- 节点2 -->
-                                <div class="process-node">
-                                    <div class="flex items-center">
-                                        <div class="w-1/2 pr-12 text-right order-1 order-md-1">
-                                            <div class="bg-gradient-to-r from-green-500 to-green-600 w-32 h-32 rounded-xl flex items-center justify-center shadow-lg transform transition-all duration-500 hover:scale-110 hover:rotate-y-180">
-                                                <i class="fas fa-truck text-white text-5xl"></i>
-                                            </div>
-                                        </div>
-                                        <div class="process-node-icon bg-blue-500 shadow-lg shadow-blue-500/30 order-2 order-md-2">
-                                            <i class="fas fa-truck-loading text-2xl"></i>
-                                        </div>
-                                        <div class="w-1/2 pl-12 order-3 order-md-3">
-                                            <div class="bg-blue-50 p-6 rounded-xl shadow-md transform transition-all duration-500 hover:scale-105 hover:shadow-lg">
-                                                <h4 class="text-xl font-bold text-green-900 mb-3">智能物流调度</h4>
-                                                <p class="text-gray-700">基于大数据分析的智能调度系统，优化路线，提高运输效率</p>
-                                                <div class="mt-4">
-                                                    <span class="text-sm font-semibold text-blue-500 bg-blue-100 px-3 py-1 rounded-full">高效运输</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- 节点3 -->
-                                <div class="process-node">
-                                    <div class="flex items-center">
-                                        <div class="w-1/2 pr-12 text-right">
-                                            <div class="bg-purple-50 p-6 rounded-xl shadow-md transform transition-all duration-500 hover:scale-105 hover:shadow-lg">
-                                                <h4 class="text-xl font-bold text-purple-900 mb-3">自动化分拣中心</h4>
-                                                <p class="text-gray-700">智能分拣机器人进行精细化分类，确保回收物的纯度和价值</p>
-                                                <div class="mt-4 flex justify-end">
-                                                    <span class="text-sm font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">精准分拣</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="process-node-icon bg-purple-500 shadow-lg shadow-purple-500/30">
-                                            <i class="fas fa-cogs text-2xl"></i>
-                                        </div>
-                                        <div class="w-1/2 pl-12">
-                                            <div class="bg-gradient-to-r from-purple-500 to-purple-600 w-32 h-32 rounded-xl flex items-center justify-center shadow-lg transform transition-all duration-500 hover:scale-110 hover:rotate-y-180">
-                                                <i class="fas fa-sitemap text-white text-5xl"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <!-- 节点4 -->
-                                <div class="process-node">
-                                    <div class="flex items-center">
-                                        <div class="w-1/2 pr-12 text-right order-1 order-md-1">
-                                            <div class="bg-gradient-to-r from-cyan-500 to-cyan-600 w-32 h-32 rounded-xl flex items-center justify-center shadow-lg transform transition-all duration-500 hover:scale-110 hover:rotate-y-180">
-                                                <i class="fas fa-leaf text-white text-5xl"></i>
-                                            </div>
-                                        </div>
-                                        <div class="process-node-icon bg-cyan-500 shadow-lg shadow-cyan-500/30 order-2 order-md-2">
-                                            <i class="fas fa-recycle text-2xl"></i>
-                                        </div>
-                                        <div class="w-1/2 pl-12 order-3 order-md-3">
-                                            <div class="bg-cyan-50 p-6 rounded-xl shadow-md transform transition-all duration-500 hover:scale-105 hover:shadow-lg">
-                                                <h4 class="text-xl font-bold text-cyan-900 mb-3">绿色循环利用</h4>
-                                                <p class="text-gray-700">可再生材料重新投入生产，减少资源浪费，保护环境</p>
-                                                <div class="mt-4">
-                                                    <span class="text-sm font-semibold text-cyan-600 bg-cyan-100 px-3 py-1 rounded-full">可持续发展</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <!-- Messages -->
+            <div class="relative">
+                <button class="p-2 rounded-full hover:bg-indigo-700 transition-colors duration-200 relative">
+                    <i data-lucide="message-circle" class="h-5 w-5"></i>
+                    <span class="absolute top-1 right-1 w-2 h-2 bg-green-500 rounded-full"></span>
+                </button>
             </div>
-        </div>
-    </section>
-
-    <!-- 智能设备展示 -->
-    <section id="equipment" class="py-20 bg-gradient-to-b from-white to-blue-50 relative overflow-hidden">
-        <div class="absolute inset-0 opacity-5">
-            <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
-                <defs>
-                    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" stroke-width="1"/>
-                    </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill="url(#grid)" />
-            </svg>
-        </div>
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">智能回收设备</h2>
-                <div class="w-24 h-1 bg-blue-600 mx-auto mb-6"></div>
-                <p class="text-gray-600 max-w-3xl mx-auto">我们的智能回收设备采用先进技术，实现垃圾的自动分类和回收，提高回收效率和准确性。</p>
-            </div>
-            
-            <div class="flex flex-col lg:flex-row items-center">
-                <div class="lg:w-1/2 mb-10 lg:mb-0">
+            <!-- User Menu -->
+            <div class="relative group" id="user-menu-container">
+                <button class="flex items-center space-x-2 focus:outline-none hover:bg-indigo-700 px-3 py-2 rounded-md transition-colors duration-200">
+                    <span class="hidden md:inline-block">欢迎，</span>
                     <div class="relative">
-                        <div id="model-container" class="rounded-lg overflow-hidden shadow-xl"></div>
-                        <div class="model-controls">
-                            <button class="model-btn" id="rotate-left">
-                                <i class="fas fa-undo"></i>
-                            </button>
-                            <button class="model-btn" id="rotate-right">
-                                <i class="fas fa-redo"></i>
-                            </button>
-                            <button class="model-btn" id="zoom-in">
-                                <i class="fas fa-search-plus"></i>
-                            </button>
-                            <button class="model-btn" id="zoom-out">
-                                <i class="fas fa-search-minus"></i>
-                            </button>
-                            <button class="model-btn" id="reset-view">
-                                <i class="fas fa-sync"></i>
-                            </button>
-                        </div>
+                        <img src="https://i.pravatar.cc/150?u=admin@example.com" alt="Admin Avatar" class="w-8 h-8 rounded-full border-2 border-white/20">
+                        <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-400 rounded-full border-2 border-indigo-600"></span>
                     </div>
-                </div>
-                
-                <div class="lg:w-1/2 lg:pl-12">
-                    <h3 class="text-2xl font-bold mb-6 text-blue-500">智能回收箱</h3>
-                    <p class="text-gray-700 mb-6">我们的智能回收箱采用先进的识别技术，能够自动识别和分类不同类型的垃圾，提高回收效率和准确性。同时，通过智能称重系统，为用户提供积分奖励，鼓励更多人参与环保行动。</p>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                        <div class="flex items-start">
-                            <div class="bg-blue-100 p-2 rounded-full mr-3">
-                                <i class="fas fa-check text-blue-500"></i>
-                            </div>
-                            <p class="text-gray-600">自动识别和分类不同类型的垃圾</p>
-                        </div>
-                        <div class="flex items-start">
-                            <div class="bg-blue-100 p-2 rounded-full mr-3">
-                                <i class="fas fa-check text-blue-500"></i>
-                            </div>
-                            <p class="text-gray-600">智能称重系统，提供积分奖励</p>
-                        </div>
-                        <div class="flex items-start">
-                            <div class="bg-blue-100 p-2 rounded-full mr-3">
-                                <i class="fas fa-check text-blue-500"></i>
-                            </div>
-                            <p class="text-gray-600">远程监控和管理，实时数据传输</p>
-                        </div>
-                        <div class="flex items-start">
-                            <div class="bg-blue-100 p-2 rounded-full mr-3">
-                                <i class="fas fa-check text-blue-500"></i>
-                            </div>
-                            <p class="text-gray-600">大容量设计，减少清理频率</p>
-                        </div>
-                        <div class="flex items-start">
-                            <div class="bg-blue-100 p-2 rounded-full mr-3">
-                                <i class="fas fa-check text-blue-500"></i>
-                            </div>
-                            <p class="text-gray-600">用户友好的界面，操作简单便捷</p>
-                        </div>
-                        <div class="flex items-start">
-                            <div class="bg-blue-100 p-2 rounded-full mr-3">
-                                <i class="fas fa-check text-blue-500"></i>
-                            </div>
-                            <p class="text-gray-600">节能环保设计，低功耗运行</p>
-                        </div>
-                    </div>
-                    
-                    <a href="#contact" class="btn-primary inline-block px-6 py-3 rounded-md font-medium">咨询设备</a>
-                </div>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
-                <div class="bg-gray-50 p-6 rounded-lg shadow-md">
-                    <img src="https://p11-doubao-search-sign.byteimg.com/labis/f6f9675dccac7fe585992bbcfe0026f8~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1781313558&x-signature=pkPxIrQTO%2BIFdI%2BNNnc8VUVOQh0%3D" alt="智能回收设备1" class="w-full h-48 object-cover rounded-md mb-4">
-                    <h4 class="text-xl font-bold mb-2">多分类回收箱</h4>
-                    <p class="text-gray-600">适用于社区、学校、商场等场所，可回收多种类型的垃圾。</p>
-                </div>
-                <div class="bg-gray-50 p-6 rounded-lg shadow-md">
-                    <img src="https://p3-doubao-search-sign.byteimg.com/tos-cn-i-tjoges91tu/d0b8387def849a738ba48a8da7ebdc5a~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1781313558&x-signature=gd14J8EuDb4DDYr30ENxtumY5kY%3D" alt="智能回收设备2" class="w-full h-48 object-cover rounded-md mb-4">
-                    <h4 class="text-xl font-bold mb-2">智能回收柜</h4>
-                    <p class="text-gray-600">带有触摸屏和智能识别系统，提供积分奖励功能。</p>
-                </div>
-                <div class="bg-gray-50 p-6 rounded-lg shadow-md">
-                    <img src="https://p11-doubao-search-sign.byteimg.com/pgc-image/d7144213ec934e01b4ecaed23580d618~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1781313558&x-signature=zqwF8iDZmAz82TdPvIG4752dZ74%3D" alt="智能回收设备3" class="w-full h-48 object-cover rounded-md mb-4">
-                    <h4 class="text-xl font-bold mb-2">大型回收站点</h4>
-                    <p class="text-gray-600">适用于城市主要区域，处理能力强，功能完善。</p>
+                    <span class="font-medium">Admin</span>
+                    <i data-lucide="chevron-down" class="w-4 h-4 opacity-70"></i>
+                </button>
+                <div class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50 opacity-0 invisible translate-y-2 transition-all duration-300 ease-in-out group-hover:opacity-100 group-hover:visible group-hover:translate-y-0" style="transition-delay: 500ms;" id="user-dropdown">
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200 flex items-center space-x-2">
+                        <i data-lucide="user" class="w-4 h-4"></i>
+                        <span>个人资料</span>
+                    </a>
+                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200 flex items-center space-x-2">
+                        <i data-lucide="settings" class="w-4 h-4"></i>
+                        <span>设置</span>
+                    </a>
+                    <div class="border-t border-gray-100 my-1"></div>
+                    <a href="#" id="logout-dropdown-btn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200 flex items-center space-x-2">
+                        <i data-lucide="log-out" class="w-4 h-4"></i>
+                        <span>退出登录</span>
+                    </a>
                 </div>
             </div>
         </div>
-    </section>
+    </header>
 
-    <!-- 新闻动态 -->
-    <section id="news" class="py-20 bg-white">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">新闻动态</h2>
-                <div class="w-24 h-1 bg-blue-600 mx-auto mb-6"></div>
-                <p class="text-gray-600 max-w-3xl mx-auto">了解最新的环保资讯、公司动态和行业发展趋势。</p>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- 新闻卡片 1 -->
-                <div class="news-card bg-white rounded-lg overflow-hidden shadow-md">
-                    <img src="https://p11-doubao-search-sign.byteimg.com/labis/d6a53b1b11dc5b3c3d5f6247d8b157f7~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1781313558&x-signature=EaZLlpBZnSMLh40V67gA7wGdAHk%3D" alt="新闻图片1" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <div class="flex items-center mb-3">
-                            <span class="bg-blue-100 text-blue-700 text-xs font-medium px-2.5 py-0.5 rounded">公司新闻</span>
-                            <span class="text-gray-500 text-sm ml-auto">2025-12-10</span>
-                        </div>
-                        <h3 class="text-xl font-bold mb-2">爱文闽智能回收设备正式投入使用</h3>
-                        <p class="text-gray-600 mb-4">近日，我公司自主研发的新一代智能回收设备正式投入使用，该设备采用先进的AI识别技术，能够自动识别和分类不同类型的垃圾...</p>
-                        <a href="#" class="text-blue-500 hover:text-blue-700 font-medium flex items-center">
-                            阅读更多 <i class="fas fa-arrow-right ml-2"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- 新闻卡片 2 -->
-                <div class="news-card bg-white rounded-lg overflow-hidden shadow-md">
-                    <img src="https://p3-doubao-search-sign.byteimg.com/labis/59ccb7691a71fd24db7185a2e7962a4f~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1781313558&x-signature=uz%2FFMxNVhzor%2BzJ6kVThUT3ln64%3D" alt="新闻图片2" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <div class="flex items-center mb-3">
-                            <span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">行业资讯</span>
-                            <span class="text-gray-500 text-sm ml-auto">2025-12-05</span>
-                        </div>
-                        <h3 class="text-xl font-bold mb-2">国家发布新的垃圾分类政策</h3>
-                        <p class="text-gray-600 mb-4">国家发改委近日发布了新的垃圾分类政策，要求到2025年底，全国地级及以上城市要基本建成垃圾分类处理系统，这将为再生资源回收行业带来新的发展机遇...</p>
-                        <a href="#" class="text-blue-600 hover:text-blue-800 font-medium flex items-center">
-                            阅读更多 <i class="fas fa-arrow-right ml-2"></i>
-                        </a>
-                    </div>
-                </div>
-                
-                <!-- 新闻卡片 3 -->
-                <div class="news-card bg-white rounded-lg overflow-hidden shadow-md">
-                    <img src="https://p11-doubao-search-sign.byteimg.com/pgc-image/d7144213ec934e01b4ecaed23580d618~tplv-be4g95zd3a-image.jpeg?rk3s=542c0f93&x-expires=1781313558&x-signature=zqwF8iDZmAz82TdPvIG4752dZ74%3D" alt="新闻图片3" class="w-full h-48 object-cover">
-                    <div class="p-6">
-                        <div class="flex items-center mb-3">
-                            <span class="bg-yellow-100 text-yellow-800 text-xs font-medium px-2.5 py-0.5 rounded">活动公告</span>
-                            <span class="text-gray-500 text-sm ml-auto">2025-11-28</span>
-                        </div>
-                        <h3 class="text-xl font-bold mb-2">爱文闽举办"垃圾分类 从我做起"主题活动</h3>
-                        <p class="text-gray-600 mb-4">为提高公众环保意识，推动垃圾分类工作，我公司将于12月15日在全市范围内举办"垃圾分类 从我做起"主题活动，活动包括知识讲座、互动游戏、现场体验等环节...</p>
-                        <a href="#" class="text-yellow-600 hover:text-yellow-800 font-medium flex items-center">
-                            阅读更多 <i class="fas fa-arrow-right ml-2"></i>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="text-center mt-10">
-                <a href="#" class="btn-secondary inline-block px-6 py-3 rounded-md font-medium">查看更多新闻</a>
-            </div>
+    <div class="flex flex-1 overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="sidebar w-64 flex-shrink-0 p-4 space-y-4 bg-gray-800">
+        <div class="text-white text-2xl font-bold flex items-center space-x-2 mb-8">
+            <i data-lucide="trash-2"></i>
+            <span>垃圾分类管理</span>
         </div>
-    </section>
-
-    <!-- 联系我们 -->
-    <section id="contact" class="py-20 bg-gradient-to-b from-white to-blue-900 text-white">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold mb-4">联系我们</h2>
-                <div class="w-24 h-1 bg-blue-600 mx-auto mb-6"></div>
-                <p class="text-gray-600 max-w-3xl mx-auto">如果您对我们的服务有任何疑问或需求，请随时与我们联系，我们将竭诚为您服务。</p>
-            </div>
-            
-            <div class="flex flex-col lg:flex-row">
-                <div class="lg:w-1/2 mb-10 lg:mb-0 lg:pr-8">
-                    <form class="bg-gray-50 p-8 rounded-lg shadow-md">
-                        <div class="mb-6">
-                            <label for="name" class="block text-gray-700 font-medium mb-2">姓名</label>
-                            <input type="text" id="name" class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-                        </div>
-                        <div class="mb-6">
-                            <label for="email" class="block text-gray-700 font-medium mb-2">邮箱</label>
-                            <input type="email" id="email" class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-                        </div>
-                        <div class="mb-6">
-                            <label for="phone" class="block text-gray-700 font-medium mb-2">电话</label>
-                            <input type="tel" id="phone" class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-                        </div>
-                        <div class="mb-6">
-                            <label for="subject" class="block text-gray-700 font-medium mb-2">主题</label>
-                            <select id="subject" class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500">
-                                <option value="">请选择</option>
-                                <option value="service">服务咨询</option>
-                                <option value="equipment">设备咨询</option>
-                                <option value="cooperation">合作洽谈</option>
-                                <option value="other">其他</option>
-                            </select>
-                        </div>
-                        <div class="mb-6">
-                            <label for="message" class="block text-gray-700 font-medium mb-2">留言</label>
-                            <textarea id="message" rows="5" class="w-full px-4 py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"></textarea>
-                        </div>
-                        <button type="submit" class="btn-primary w-full py-3 rounded-md font-medium text-lg">提交</button>
-                    </form>
-                </div>
-                
-                <div class="lg:w-1/2 lg:pl-8">
-                    <div class="bg-gray-50 p-8 rounded-lg shadow-md mb-8">
-                        <h3 class="text-2xl font-bold mb-6 text-blue-500">联系方式</h3>
-                        <div class="space-y-4">
-                            <div class="flex items-start">
-                                <div class="bg-blue-100 p-3 rounded-full mr-4">
-                                    <i class="fas fa-map-marker-alt text-blue-500"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold mb-1">地址</h4>
-                                    <p class="text-gray-600">福建省福州市鼓楼区环保科技园A座1001室</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start">
-                                <div class="bg-blue-100 p-3 rounded-full mr-4">
-                                    <i class="fas fa-phone-alt text-blue-500"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold mb-1">电话</h4>
-                                    <p class="text-gray-600">400-123-4567</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start">
-                                <div class="bg-blue-100 p-3 rounded-full mr-4">
-                                    <i class="fas fa-envelope text-blue-500"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold mb-1">邮箱</h4>
-                                    <p class="text-gray-600">info@aiwenmin.com.cn</p>
-                                </div>
-                            </div>
-                            <div class="flex items-start">
-                                <div class="bg-blue-100 p-3 rounded-full mr-4">
-                                    <i class="fas fa-clock text-blue-500"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-bold mb-1">工作时间</h4>
-                                    <p class="text-gray-600">周一至周五: 9:00 - 18:00</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-gray-50 p-8 rounded-lg shadow-md">
-                        <h3 class="text-2xl font-bold mb-6 text-blue-500">关注我们</h3>
-                        <div class="flex space-x-4">
-                            <a href="#" class="social-icon">
-                                <i class="fab fa-weixin"></i>
-                            </a>
-                            <a href="#" class="social-icon">
-                                <i class="fab fa-weibo"></i>
-                            </a>
-                            <a href="#" class="social-icon">
-                                <i class="fab fa-qq"></i>
-                            </a>
-                            <a href="#" class="social-icon">
-                                <i class="fab fa-linkedin-in"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <nav class="space-y-2">
+            <a href="#" class="flex items-center space-x-2 p-2 rounded-lg active bg-gray-700" data-section="dashboard">
+                <i data-lucide="layout-dashboard"></i>
+                <span>数据概览</span>
+            </a>
+            <a href="#" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700" data-section="categories">
+                <i data-lucide="layers"></i>
+                <span>分类管理</span>
+            </a>
+            <a href="#" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700" data-section="rewards">
+                <i data-lucide="gift"></i>
+                <span>积分奖励</span>
+            </a>
+            <a href="#" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700" data-section="leaderboard">
+                <i data-lucide="trophy"></i>
+                <span>排行榜</span>
+            </a>
+            <a href="#" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700" data-section="activities">
+                <i data-lucide="calendar"></i>
+                <span>活动管理</span>
+            </a>
+            <a href="#" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700" data-section="news">
+                <i data-lucide="newspaper"></i>
+                <span>资讯管理</span>
+            </a>
+            <a href="#" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700" data-section="users">
+                <i data-lucide="users"></i>
+                <span>用户管理</span>
+            </a>
+            <a href="#" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700" data-section="logs">
+                <i data-lucide="file-text"></i>
+                <span>操作日志</span>
+            </a>
+            <a href="#" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700" data-section="settings">
+                <i data-lucide="settings"></i>
+                <span>系统设置</span>
+            </a>
+        </nav>
+        <div class="absolute bottom-4 left-4">
+            <button id="theme-toggle" class="p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-color bg-gray-700">
+                <i data-lucide="sun" class="text-yellow-400"></i>
+                <i data-lucide="moon" class="text-blue-400 hidden"></i>
+            </button>
         </div>
-    </section>
+    </aside>
 
-    <!-- 页脚 -->
-    <footer class="footer py-12">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
-                <div>
-                    <div class="flex items-center mb-6">
-                        <img src="https://p9-flow-imagex-sign.byteimg.com/tos-cn-i-a9rns2rl98/rc/pc/super_tool/da994b6e36e24ebfa07a4637ed5fa97e~tplv-a9rns2rl98-image.image?rcl=20251215092540875000DF74F5CD5937C0&rk3s=8e244e95&rrcfp=f06b921b&x-expires=1768353961&x-signature=q7%2BF%2BpT8w4o8JcWqaulZhWmW7GM%3D" alt="爱文闽" class="h-10 mr-3">
-                        <span class="text-xl font-bold text-white">爱文闽再生资源 <span class="text-blue-300 font-normal">EcoMin</span></span>
-                    </div>
-                    <p class="text-gray-400 mb-6">致力于提供智能、高效、便捷的再生资源回收解决方案，共建绿色可持续未来。</p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-blue-600 hover:text-white transition-all duration-300">
-                            <i class="fab fa-weixin"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-blue-600 hover:text-white transition-all duration-300">
-                            <i class="fab fa-weibo"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-blue-600 hover:text-white transition-all duration-300">
-                            <i class="fab fa-qq"></i>
-                        </a>
-                        <a href="#" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-blue-600 hover:text-white transition-all duration-300">
-                            <i class="fab fa-linkedin-in"></i>
-                        </a>
-                    </div>
+    <!-- Main Content -->
+    <main class="flex-1 p-6 overflow-y-auto bg-gray-100 dark:bg-gray-900">
+        <header class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold" id="main-title">数据概览</h1>
+            <div class="flex items-center space-x-4">
+                <div class="relative">
+                    <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" placeholder="搜索..." class="pl-10 pr-4 py-2 rounded-lg border focus:ring-primary-color focus:border-primary-color dark:bg-gray-700 dark:border-gray-600">
                 </div>
-                
-                <div>
-                    <h4 class="text-lg font-bold text-white mb-6">快速链接</h4>
-                    <ul class="space-y-3">
-                        <li><a href="#home" class="footer-link">首页</a></li>
-                        <li><a href="#about" class="footer-link">关于我们</a></li>
-                        <li><a href="#services" class="footer-link">服务项目</a></li>
-                        <li><a href="#process" class="footer-link">回收流程</a></li>
-                        <li><a href="#equipment" class="footer-link">智能设备</a></li>
-                        <li><a href="#news" class="footer-link">新闻动态</a></li>
-                        <li><a href="#contact" class="footer-link">联系我们</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4 class="text-lg font-bold text-white mb-6">服务项目</h4>
-                    <ul class="space-y-3">
-                        <li><a href="#" class="footer-link">智能垃圾分类回收</a></li>
-                        <li><a href="#" class="footer-link">工业废料回收处理</a></li>
-                        <li><a href="#" class="footer-link">电子产品回收</a></li>
-                        <li><a href="#" class="footer-link">上门回收服务</a></li>
-                        <li><a href="#" class="footer-link">回收数据分析</a></li>
-                        <li><a href="#" class="footer-link">环保教育宣传</a></li>
-                    </ul>
-                </div>
-                
-                <div>
-                    <h4 class="text-lg font-bold text-white mb-6">联系方式</h4>
-                    <ul class="space-y-3">
-                        <li class="flex items-start">
-                            <i class="fas fa-map-marker-alt text-blue-400 mt-1 mr-3"></i>
-                            <span class="text-gray-400">福建省福州市鼓楼区环保科技园A座1001室</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-phone-alt text-blue-400 mt-1 mr-3"></i>
-                            <span class="text-gray-400">400-123-4567</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-envelope text-blue-400 mt-1 mr-3"></i>
-                            <span class="text-gray-400">info@aiwenmin.com.cn</span>
-                        </li>
-                        <li class="flex items-start">
-                            <i class="fas fa-clock text-blue-400 mt-1 mr-3"></i>
-                            <span class="text-gray-400">周一至周五: 9:00 - 18:00</span>
-                        </li>
-                    </ul>
-                </div>
+                <button class="btn-primary px-4 py-2 rounded-lg flex items-center space-x-2">
+                    <i data-lucide="plus"></i>
+                    <span>新增</span>
+                </button>
             </div>
-            
-            <div class="border-t border-gray-700 pt-8">
-                <div class="flex flex-col md:flex-row justify-between items-center">
-                    <p class="text-gray-400 mb-4 md:mb-0">© 2025 爱文闽再生资源科技有限公司 EcoMin Technology Co., Ltd. 保留所有权利.</p>
-                    <div class="flex space-x-6">
-                        <a href="#" class="text-gray-400 hover:text-white">隐私政策</a>
-                        <a href="#" class="text-gray-400 hover:text-white">服务条款</a>
-                        <a href="#" class="text-gray-400 hover:text-white">网站地图</a>
+        </header>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard-section">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                <div class="card p-6 rounded-xl shadow-md flex items-center space-x-4">
+                    <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-full">
+                        <i data-lucide="trash" class="text-blue-500"></i>
+                    </div>
+                    <div>
+                        <p class="text-gray-500 dark:text-gray-400">总投递次数</p>
+                        <p class="text-2xl font-bold">12,345</p>
+                    </div>
+                </div>
+                <div class="card p-6 rounded-xl shadow-md flex items-center space-x-4">
+                    <div class="bg-green-100 dark:bg-green-900 p-3 rounded-full">
+                        <i data-lucide="users" class="text-green-500"></i>
+                    </div>
+                    <div>
+                        <p class="text-gray-500 dark:text-gray-400">活跃用户</p>
+                        <p class="text-2xl font-bold">5,678</p>
+                    </div>
+                </div>
+                <div class="card p-6 rounded-xl shadow-md flex items-center space-x-4">
+                    <div class="bg-yellow-100 dark:bg-yellow-900 p-3 rounded-full">
+                        <i data-lucide="star" class="text-yellow-500"></i>
+                    </div>
+                    <div>
+                        <p class="text-gray-500 dark:text-gray-400">总积分</p>
+                        <p class="text-2xl font-bold">89,012</p>
+                    </div>
+                </div>
+                <div class="card p-6 rounded-xl shadow-md flex items-center space-x-4">
+                    <div class="bg-red-100 dark:bg-red-900 p-3 rounded-full">
+                        <i data-lucide="alert-circle" class="text-red-500"></i>
+                    </div>
+                    <div>
+                        <p class="text-gray-500 dark:text-gray-400">错误投递</p>
+                        <p class="text-2xl font-bold">123</p>
                     </div>
                 </div>
             </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 card p-6 rounded-xl shadow-md">
+                    <h2 class="text-xl font-bold mb-4">投递趋势</h2>
+                    <div style="height: 300px;">
+                        <canvas id="trend-chart"></canvas>
+                    </div>
+                </div>
+                <div class="card p-6 rounded-xl shadow-md">
+                    <h2 class="text-xl font-bold mb-4">分类占比</h2>
+                    <div style="height: 300px;">
+                        <canvas id="category-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories Section -->
+        <section id="categories-section" class="hidden">
+            <div class="card p-6 rounded-xl shadow-md">
+                <h2 class="text-xl font-bold mb-4">分类列表</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left min-w-[640px]">
+                        <thead>
+                            <tr class="border-b dark:border-gray-700">
+                                <th class="p-2">分类名称</th>
+                                <th class="p-2">图标</th>
+                                <th class="p-2">积分</th>
+                                <th class="p-2">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Category data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Rewards Section -->
+        <section id="rewards-section" class="hidden">
+            <div class="card p-6 rounded-xl shadow-md">
+                <h2 class="text-xl font-bold mb-4">奖励列表</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left min-w-[640px]">
+                        <thead>
+                            <tr class="border-b dark:border-gray-700">
+                                <th class="p-2">奖励名称</th>
+                                <th class="p-2">所需积分</th>
+                                <th class="p-2">库存</th>
+                                <th class="p-2">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Reward data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Leaderboard Section -->
+        <section id="leaderboard-section" class="hidden">
+            <div class="card p-6 rounded-xl shadow-md">
+                <h2 class="text-xl font-bold mb-4">用户排行榜</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left min-w-[640px]">
+                        <thead>
+                            <tr class="border-b dark:border-gray-700">
+                                <th class="p-2">排名</th>
+                                <th class="p-2">用户</th>
+                                <th class="p-2">投递次数</th>
+                                <th class="p-2">总积分</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Leaderboard data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activities Section -->
+        <section id="activities-section" class="hidden">
+            <div class="card p-6 rounded-xl shadow-md">
+                <h2 class="text-xl font-bold mb-4">活动列表</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left min-w-[640px]">
+                        <thead>
+                            <tr class="border-b dark:border-gray-700">
+                                <th class="p-2">活动名称</th>
+                                <th class="p-2">开始时间</th>
+                                <th class="p-2">结束时间</th>
+                                <th class="p-2">状态</th>
+                                <th class="p-2">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Activity data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- News Section -->
+        <section id="news-section" class="hidden">
+            <div class="card p-6 rounded-xl shadow-md">
+                <h2 class="text-xl font-bold mb-4">资讯列表</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left min-w-[640px]">
+                        <thead>
+                            <tr class="border-b dark:border-gray-700">
+                                <th class="p-2">标题</th>
+                                <th class="p-2">发布日期</th>
+                                <th class="p-2">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- News data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Logs Section -->
+        <section id="logs-section" class="hidden">
+            <div class="card p-6 rounded-xl shadow-md">
+                <h2 class="text-xl font-bold mb-4">操作日志</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left min-w-[640px]">
+                        <thead>
+                            <tr class="border-b dark:border-gray-700">
+                                <th class="p-2">时间</th>
+                                <th class="p-2">用户</th>
+                                <th class="p-2">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Log data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+                 <div id="logs-pagination"></div>
+            </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section id="settings-section" class="hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 card p-6 rounded-xl shadow-md">
+                    <h2 class="text-xl font-bold mb-4">用户管理</h2>
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="border-b dark:border-gray-700">
+                                <th class="p-2">用户名</th>
+                                <th class="p-2">角色</th>
+                                <th class="p-2">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b dark:border-gray-700">
+                                <td class="p-2">admin</td>
+                                <td class="p-2">超级管理员</td>
+                                <td class="p-2 space-x-2">
+                                    <button class="text-blue-500 hover:text-blue-700"><i data-lucide="edit"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="card p-6 rounded-xl shadow-md">
+                    <h2 class="text-xl font-bold mb-4">角色管理</h2>
+                    <div id="role-form-container"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Users Section -->
+        <section id="users-section" class="hidden">
+            <div class="card p-6 rounded-xl shadow-md">
+                <h2 class="text-xl font-bold mb-4">用户列表</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left min-w-[640px]">
+                        <thead>
+                            <tr class="border-b dark:border-gray-700">
+                                <th class="p-2">用户名</th>
+                                <th class="p-2">邮箱</th>
+                                <th class="p-2">注册日期</th>
+                                <th class="p-2">状态</th>
+                                <th class="p-2">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- User data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal -->
+    <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+        <div class="card p-8 rounded-xl shadow-2xl w-full max-w-md">
+            <h2 id="modal-title" class="text-2xl font-bold mb-4">新增分类</h2>
+            <form id="modal-form">
+                <div class="mb-4">
+                    <label for="modal-name" class="block mb-2">名称</label>
+                    <input type="text" id="modal-name" class="w-full p-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600" required>
+                </div>
+                <div class="mb-4">
+                    <label for="modal-points" class="block mb-2">积分</label>
+                    <input type="number" id="modal-points" class="w-full p-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600" required>
+                </div>
+                <div class="flex justify-end space-x-4">
+                    <button type="button" id="modal-cancel" class="px-4 py-2 rounded-lg border">取消</button>
+                    <button type="submit" class="btn-primary px-4 py-2 rounded-lg">保存</button>
+                </div>
+            </form>
         </div>
-    </footer>
+    </div>
 
-    <!-- AI聊天窗口 -->
+    <script src="./src/utils/ui.js"></script>
+    <script src="./src/components/filters.js"></script>
+    <script src="./src/js/api.js"></script>
+    <script src="./src/js/app.js"></script>
     <script>
-        // 移动端菜单切换
-        document.getElementById('mobile-menu-button').addEventListener('click', function() {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
-        });
-        
-        // 页面加载完成后执行
-        document.addEventListener('DOMContentLoaded', function() {
-            // 初始化GSAP ScrollTrigger
-            gsap.registerPlugin(ScrollTrigger);
-            
-            // 淡入动画
-            gsap.utils.toArray('.fade-in').forEach(function(element) {
-                gsap.fromTo(element, 
-                    {opacity: 0, y: 50}, 
-                    {
-                        opacity: 1, 
-                        y: 0, 
-                        duration: 1,
-                        scrollTrigger: {
-                            trigger: element,
-                            start: "top 80%",
-                            toggleActions: "play none none none"
-                        }
-                    }
-                );
-            });
-            
-            // 数字增长动画
-            animateValue('stat-1', 0, 500, 2000);
-            animateValue('stat-2', 0, 10000, 2000);
-            animateValue('stat-3', 0, 200000, 2000);
-            animateValue('stat-4', 0, 5000, 2000);
-            
-            // 初始化粒子效果
-            initParticles();
-            
-            // 初始化图表
-            initCharts();
-            
-            // 导航栏滚动效果
-            initNavbarScroll();
-        });
-        
-        // 数字增长动画函数
-        function animateValue(id, start, end, duration) {
-            const obj = document.getElementById(id);
-            const range = end - start;
-            const minTimer = 50;
-            let stepTime = Math.abs(Math.floor(duration / range));
-            
-            stepTime = Math.max(stepTime, minTimer);
-            
-            let startTime = new Date().getTime();
-            let endTime = startTime + duration;
-            let timer;
-            
-            function run() {
-                let now = new Date().getTime();
-                let remaining = Math.max((endTime - now) / duration, 0);
-                let value = Math.round(end - (remaining * range));
-                
-                // 添加千位分隔符
-                obj.innerText = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                
-                if (value === end) {
-                    clearInterval(timer);
-                }
-            }
-            
-            timer = setInterval(run, stepTime);
-            run();
+        // Check login status
+        if (!localStorage.getItem('isLoggedIn')) {
+            window.location.href = 'login.html';
         }
-        
-        // 初始化粒子效果
-        function initParticles() {
-            particlesJS('particles-js', {
-                "particles": {
-                    "number": {
-                        "value": 80,
-                        "density": {
-                            "enable": true,
-                            "value_area": 800
-                        }
-                    },
-                    "color": {
-                        "value": "#ffffff"
-                    },
-                    "shape": {
-                        "type": "circle",
-                        "stroke": {
-                            "width": 0,
-                            "color": "#000000"
-                        }
-                    },
-                    "opacity": {
-                        "value": 0.5,
-                        "random": true,
-                        "anim": {
-                            "enable": true,
-                            "speed": 1,
-                            "opacity_min": 0.1,
-                            "sync": false
-                        }
-                    },
-                    "size": {
-                        "value": 3,
-                        "random": true,
-                        "anim": {
-                            "enable": true,
-                            "speed": 2,
-                            "size_min": 0.1,
-                            "sync": false
-                        }
-                    },
-                    "line_linked": {
-                        "enable": true,
-                        "distance": 150,
-                        "color": "#ffffff",
-                        "opacity": 0.2,
-                        "width": 1
-                    },
-                    "move": {
-                        "enable": true,
-                        "speed": 1,
-                        "direction": "none",
-                        "random": true,
-                        "straight": false,
-                        "out_mode": "out",
-                        "bounce": false,
-                        "attract": {
-                            "enable": false,
-                            "rotateX": 600,
-                            "rotateY": 1200
-                        }
-                    }
-                },
-                "interactivity": {
-                    "detect_on": "canvas",
-                    "events": {
-                        "onhover": {
-                            "enable": true,
-                            "mode": "grab"
-                        },
-                        "onclick": {
-                            "enable": true,
-                            "mode": "push"
-                        },
-                        "resize": true
-                    },
-                    "modes": {
-                        "grab": {
-                            "distance": 140,
-                            "line_linked": {
-                                "opacity": 0.5
-                            }
-                        },
-                        "push": {
-                            "particles_nb": 4
-                        }
-                    }
-                },
-                "retina_detect": true
-            });
-        }
-        
-        // 初始化图表
-        function initCharts() {
-            // 月度回收量趋势图
-            const recyclingCtx = document.getElementById('recyclingChart').getContext('2d');
-            const recyclingChart = new Chart(recyclingCtx, {
-                type: 'line',
-                data: {
-                    labels: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
-                    datasets: [{
-                        label: '回收量 (吨)',
-                        data: [120, 150, 180, 210, 250, 300, 350, 380, 420, 450, 480, 520],
-                        backgroundColor: 'rgba(0, 112, 243, 0.1)',
-                        borderColor: 'rgba(0, 112, 243, 1)',
-                        borderWidth: 2,
-                        tension: 0.4,
-                        fill: true,
-                        pointBackgroundColor: 'rgba(0, 112, 243, 1)',
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: 2,
-                        pointRadius: 4,
-                        pointHoverRadius: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        },
-                        tooltip: {
-                            mode: 'index',
-                            intersect: false,
-                            backgroundColor: 'rgba(10, 36, 99, 0.9)',
-                            titleColor: '#fff',
-                            bodyColor: '#fff',
-                            borderColor: 'rgba(0, 198, 255, 0.5)',
-                            borderWidth: 1
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: {
-                                display: false
-                            },
-                            ticks: {
-                                color: '#666'
-                            }
-                        },
-                        y: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(0, 0, 0, 0.05)'
-                            },
-                            ticks: {
-                                color: '#666'
-                            }
-                        }
-                    }
-                }
-            });
-            
-            // 回收物类型分布图
-            const distributionCtx = document.getElementById('distributionChart').getContext('2d');
-            const distributionChart = new Chart(distributionCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['塑料', '纸张', '金属', '玻璃', '电子废弃物', '其他'],
-                    datasets: [{
-                        data: [35, 25, 15, 10, 10, 5],
-                        backgroundColor: [
-                            'rgba(0, 112, 243, 0.8)',
-                            'rgba(0, 198, 255, 0.8)',
-                            'rgba(10, 36, 99, 0.8)',
-                            'rgba(2, 136, 209, 0.8)',
-                            'rgba(66, 165, 245, 0.8)',
-                            'rgba(173, 216, 230, 0.8)'
-                        ],
-                        borderColor: [
-                            'rgba(0, 112, 243, 1)',
-                            'rgba(0, 198, 255, 1)',
-                            'rgba(10, 36, 99, 1)',
-                            'rgba(2, 136, 209, 1)',
-                            'rgba(66, 165, 245, 1)',
-                            'rgba(173, 216, 230, 1)'
-                        ],
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            position: 'right',
-                            labels: {
-                                color: '#666',
-                                padding: 15,
-                                usePointStyle: true,
-                                pointStyle: 'circle'
-                            }
-                        },
-                        tooltip: {
-                            backgroundColor: 'rgba(10, 36, 99, 0.9)',
-                            titleColor: '#fff',
-                            bodyColor: '#fff',
-                            borderColor: 'rgba(0, 198, 255, 0.5)',
-                            borderWidth: 1,
-                            callbacks: {
-                                label: function(context) {
-                                    const label = context.label || '';
-                                    const value = context.raw || 0;
-                                    return `${label}: ${value}%`;
-                                }
-                            }
-                        }
-                    },
-                    cutout: '60%'
-                }
-            });
-        }
-        
-        // 导航栏滚动效果
-        function initNavbarScroll() {
-            const navbar = document.querySelector('nav');
-            
-            window.addEventListener('scroll', function() {
-                if (window.scrollY > 50) {
-                    navbar.classList.add('shadow-lg');
-                    navbar.classList.add('bg-white/95');
-                    navbar.classList.add('backdrop-blur-sm');
-                } else {
-                    navbar.classList.remove('shadow-lg');
-                    navbar.classList.remove('bg-white/95');
-                    navbar.classList.remove('backdrop-blur-sm');
-                }
-            });
-        }
-        
-        // 3D模型展示
-        document.addEventListener('DOMContentLoaded', function() {
-            // 创建场景
-            const scene = new THREE.Scene();
-            scene.background = new THREE.Color(0xf0f8ff);
-            
-            // 创建相机
-            const camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-            camera.position.z = 5;
-            
-            // 创建渲染器
-            const container = document.getElementById('model-container');
-            const renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(container.clientWidth, container.clientHeight);
-            container.appendChild(renderer.domElement);
-            
-            // 添加灯光
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-            scene.add(ambientLight);
-            
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-            directionalLight.position.set(1, 1, 1);
-            scene.add(directionalLight);
-            
-            // 创建智能回收箱模型
-            const recyclingBin = new THREE.Group();
-            
-            // 主体
-            const bodyGeometry = new THREE.BoxGeometry(2, 2.5, 1);
-            const bodyMaterial = new THREE.MeshPhongMaterial({ color: 0x4CAF50 });
-            const body = new THREE.Mesh(bodyGeometry, bodyMaterial);
-            recyclingBin.add(body);
-            
-            // 顶部
-            const topGeometry = new THREE.BoxGeometry(2.2, 0.2, 1.2);
-            const topMaterial = new THREE.MeshPhongMaterial({ color: 0x2E7D32 });
-            const top = new THREE.Mesh(topGeometry, topMaterial);
-            top.position.y = 1.35;
-            recyclingBin.add(top);
-            
-            // 屏幕
-            const screenGeometry = new THREE.PlaneGeometry(0.8, 1.2);
-            const screenMaterial = new THREE.MeshPhongMaterial({ color: 0x2196F3 });
-            const screen = new THREE.Mesh(screenGeometry, screenMaterial);
-            screen.position.set(-0.6, 0, 0.51);
-            recyclingBin.add(screen);
-            
-            // 投口
-            const slotGeometry = new THREE.BoxGeometry(0.5, 0.1, 0.1);
-            const slotMaterial = new THREE.MeshPhongMaterial({ color: 0x333333 });
-            
-            const slot1 = new THREE.Mesh(slotGeometry, slotMaterial);
-            slot1.position.set(0.5, 0.5, 0.51);
-            recyclingBin.add(slot1);
-            
-            const slot2 = new THREE.Mesh(slotGeometry, slotMaterial);
-            slot2.position.set(0.5, 0, 0.51);
-            recyclingBin.add(slot2);
-            
-            const slot3 = new THREE.Mesh(slotGeometry, slotMaterial);
-            slot3.position.set(0.5, -0.5, 0.51);
-            recyclingBin.add(slot3);
-            
-            // 回收标志
-            const logoGeometry = new THREE.CircleGeometry(0.3, 32);
-            const logoMaterial = new THREE.MeshPhongMaterial({ color: 0xFFFFFF });
-            const logo = new THREE.Mesh(logoGeometry, logoMaterial);
-            logo.position.set(-0.6, -0.8, 0.51);
-            recyclingBin.add(logo);
-            
-            scene.add(recyclingBin);
-            
-            // 动画
-            function animate() {
-                requestAnimationFrame(animate);
-                
-                recyclingBin.rotation.y += 0.01;
-                
-                renderer.render(scene, camera);
-            }
-            
-            animate();
-            
-            // 控制按钮
-            document.getElementById('rotate-left').addEventListener('click', function() {
-                recyclingBin.rotation.y -= 0.5;
-            });
-            
-            document.getElementById('rotate-right').addEventListener('click', function() {
-                recyclingBin.rotation.y += 0.5;
-            });
-            
-            document.getElementById('zoom-in').addEventListener('click', function() {
-                camera.position.z -= 0.5;
-            });
-            
-            document.getElementById('zoom-out').addEventListener('click', function() {
-                camera.position.z += 0.5;
-            });
-            
-            document.getElementById('reset-view').addEventListener('click', function() {
-                camera.position.z = 5;
-                recyclingBin.rotation.y = 0;
-            });
-            
-            // 响应窗口大小变化
-            window.addEventListener('resize', function() {
-                renderer.setSize(container.clientWidth, container.clientHeight);
-                camera.aspect = container.clientWidth / container.clientHeight;
-                camera.updateProjectionMatrix();
-            });
-        });
-        
-
     </script>
 </body>
 </html>

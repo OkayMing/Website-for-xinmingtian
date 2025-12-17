@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登录 - 垃圾分类管理系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lucide@0.544.0/dist/umd/lucide.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #4F46E5;
+            --secondary-color: #10B981;
+            --background-color: #F3F4F6;
+            --card-background: #FFFFFF;
+            --text-color: #1F2937;
+        }
+        .dark {
+            --primary-color: #6366F1;
+            --secondary-color: #34D399;
+            --background-color: #111827;
+            --card-background: #1F2937;
+            --text-color: #F9FAFB;
+        }
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-family: 'Inter', sans-serif;
+        }
+        .card {
+            background-color: var(--card-background);
+        }
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+    <div id="login-container" class="w-full max-w-md space-y-8">
+        <div class="text-center">
+            <i data-lucide="trash-2" class="mx-auto h-12 w-12 text-primary-color"></i>
+            <h1 class="mt-6 text-3xl font-bold tracking-tight">垃圾分类管理系统</h1>
+            <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">请登录以访问管理后台 (测试账号: admin, 密码: admin)</p>
+        </div>
+        <form id="login-form" class="mt-8 space-y-6 card p-8 rounded-2xl shadow-xl">
+            <div>
+                <label for="username" class="block text-sm font-medium mb-2">用户名</label>
+                <div class="relative">
+                    <i data-lucide="user" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input id="username" name="username" type="text" required class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-color focus:border-primary-color dark:bg-gray-700 dark:border-gray-600">
+                </div>
+            </div>
+            <div>
+                <label for="password" class="block text-sm font-medium mb-2">密码</label>
+                <div class="relative">
+                    <i data-lucide="lock" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input id="password" name="password" type="password" required class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-primary-color focus:border-primary-color dark:bg-gray-700 dark:border-gray-600">
+                </div>
+            </div>
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <input id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-primary-color focus:ring-primary-color border-gray-300 rounded">
+                    <label for="remember-me" class="ml-2 block text-sm text-gray-900 dark:text-gray-300">记住我</label>
+                </div>
+                <div class="text-sm">
+                    <a href="#" class="font-medium text-primary-color hover:text-indigo-500">忘记密码?</a>
+                </div>
+            </div>
+            <div>
+                <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium btn-primary hover:bg-opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-color">登录</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const loginForm = document.getElementById('login-form');
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Simple validation
+            if (username === 'admin' && password === 'admin') {
+                localStorage.setItem('isLoggedIn', 'true');
+                window.location.href = 'index.html';
+            } else {
+                alert('用户名或密码错误');
+            }
+        });
+    </script>
+</body>
+</html>
