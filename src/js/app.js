@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     setupModal();
     setupLogout();
     setupSearch();
+    setupNotifications();
+    setupRoleManagement();
 });
 
 function initializeTheme() {
@@ -176,6 +178,10 @@ function loadInitialData() {
     populateNews();
     populateLogs();
     populateUsers();
+    populateDevices();
+    populateAnalytics();
+    populateOperations();
+    populateAIMonitoring();
 }
 
 function setupBatchOperations(prefix) {
@@ -496,6 +502,708 @@ function setupLogout() {
             window.location.href = 'login.html';
         });
     });
+}
+
+// Edit functions
+function editCategory(id) {
+    const category = API.getCategory(id);
+    if (category) {
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalForm = document.getElementById('modal-form');
+        const nameInput = document.getElementById('modal-name');
+        const pointsInput = document.getElementById('modal-points');
+        
+        modalTitle.textContent = '编辑分类';
+        nameInput.value = category.name;
+        pointsInput.value = category.points;
+        modalForm.dataset.editId = id;
+        
+        modal.classList.remove('hidden');
+    }
+}
+
+function editReward(id) {
+    const reward = API.getReward(id);
+    if (reward) {
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalForm = document.getElementById('modal-form');
+        const nameInput = document.getElementById('modal-name');
+        const pointsInput = document.getElementById('modal-points');
+        
+        modalTitle.textContent = '编辑奖励';
+        nameInput.value = reward.name;
+        pointsInput.value = reward.points;
+        modalForm.dataset.editId = id;
+        
+        modal.classList.remove('hidden');
+    }
+}
+
+function editActivity(id) {
+    const activity = API.getActivity(id);
+    if (activity) {
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalForm = document.getElementById('modal-form');
+        const nameInput = document.getElementById('modal-name');
+        
+        modalTitle.textContent = '编辑活动';
+        nameInput.value = activity.name;
+        modalForm.dataset.editId = id;
+        
+        // Add date fields if they don't exist
+        let startDateInput = document.getElementById('modal-start-date');
+        let endDateInput = document.getElementById('modal-end-date');
+        
+        if (!startDateInput) {
+            const dateFieldsContainer = document.createElement('div');
+            dateFieldsContainer.innerHTML = `
+                <div class="mb-4">
+                    <label for="modal-start-date" class="block mb-2">开始日期</label>
+                    <input type="date" id="modal-start-date" class="w-full p-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600" required>
+                </div>
+                <div class="mb-4">
+                    <label for="modal-end-date" class="block mb-2">结束日期</label>
+                    <input type="date" id="modal-end-date" class="w-full p-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600" required>
+                </div>
+            `;
+            pointsInput.parentNode.insertAdjacentElement('afterend', dateFieldsContainer);
+            startDateInput = document.getElementById('modal-start-date');
+            endDateInput = document.getElementById('modal-end-date');
+        }
+        
+        startDateInput.value = activity.start;
+        endDateInput.value = activity.end;
+        
+        modal.classList.remove('hidden');
+    }
+}
+
+function editNews(id) {
+    const newsItem = API.getNewsItem(id);
+    if (newsItem) {
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalForm = document.getElementById('modal-form');
+        const nameInput = document.getElementById('modal-name');
+        
+        modalTitle.textContent = '编辑资讯';
+        nameInput.value = newsItem.title;
+        modalForm.dataset.editId = id;
+        
+        // Add content field if it doesn't exist
+        let contentInput = document.getElementById('modal-content');
+        
+        if (!contentInput) {
+            const contentFieldContainer = document.createElement('div');
+            contentFieldContainer.innerHTML = `
+                <div class="mb-4">
+                    <label for="modal-content" class="block mb-2">内容</label>
+                    <textarea id="modal-content" class="w-full p-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600" rows="4" required></textarea>
+                </div>
+            `;
+            pointsInput.parentNode.insertAdjacentElement('afterend', contentFieldContainer);
+            contentInput = document.getElementById('modal-content');
+        }
+        
+        contentInput.value = newsItem.content;
+        
+        modal.classList.remove('hidden');
+    }
+}
+
+function editUser(id) {
+    const user = API.getUser(id);
+    if (user) {
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalForm = document.getElementById('modal-form');
+        const nameInput = document.getElementById('modal-name');
+        
+        modalTitle.textContent = '编辑用户';
+        nameInput.value = user.username;
+        modalForm.dataset.editId = id;
+        
+        // Add email field if it doesn't exist
+        let emailInput = document.getElementById('modal-email');
+        
+        if (!emailInput) {
+            const emailFieldContainer = document.createElement('div');
+            emailFieldContainer.innerHTML = `
+                <div class="mb-4">
+                    <label for="modal-email" class="block mb-2">邮箱</label>
+                    <input type="email" id="modal-email" class="w-full p-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600" required>
+                </div>
+            `;
+            pointsInput.parentNode.insertAdjacentElement('afterend', emailFieldContainer);
+            emailInput = document.getElementById('modal-email');
+        }
+        
+        emailInput.value = user.email;
+        
+        modal.classList.remove('hidden');
+    }
+}
+
+// Delete functions
+function deleteCategory(id) {
+    ConfirmDialog.show('确定要删除这个分类吗？', () => {
+        API.deleteCategory(id);
+        populateCategories();
+        Toast.show('删除成功', 'success');
+    });
+}
+
+function deleteReward(id) {
+    ConfirmDialog.show('确定要删除这个奖励吗？', () => {
+        API.deleteReward(id);
+        populateRewards();
+        Toast.show('删除成功', 'success');
+    });
+}
+
+function deleteActivity(id) {
+    ConfirmDialog.show('确定要删除这个活动吗？', () => {
+        API.deleteActivity(id);
+        populateActivities();
+        Toast.show('删除成功', 'success');
+    });
+}
+
+function deleteNews(id) {
+    ConfirmDialog.show('确定要删除这个资讯吗？', () => {
+        API.deleteNews(id);
+        populateNews();
+        Toast.show('删除成功', 'success');
+    });
+}
+
+function deleteUser(id) {
+    ConfirmDialog.show('确定要删除这个用户吗？', () => {
+        API.deleteUser(id);
+        populateUsers();
+        Toast.show('删除成功', 'success');
+    });
+}
+
+// Setup notifications and messages
+function setupNotifications() {
+    const notificationBtn = document.querySelector('header .relative:nth-child(1) button');
+    const messageBtn = document.querySelector('header .relative:nth-child(2) button');
+    
+    notificationBtn.addEventListener('click', () => {
+        Toast.show('暂无新通知', 'info');
+    });
+    
+    messageBtn.addEventListener('click', () => {
+        Toast.show('暂无新消息', 'info');
+    });
+}
+
+// Setup role management
+function setupRoleManagement() {
+    const container = document.getElementById('role-form-container');
+    if (container) {
+        container.innerHTML = `
+            <form id="role-form">
+                <div class="mb-4">
+                    <label for="role-name" class="block mb-2">角色名称</label>
+                    <input type="text" id="role-name" class="w-full p-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block mb-2">权限</label>
+                    <div class="space-y-2">
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="role-permission" value="dashboard">
+                            <span>数据概览</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="role-permission" value="devices">
+                            <span>设备监控</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="role-permission" value="analytics">
+                            <span>数据分析</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="role-permission" value="operations">
+                            <span>运营管理</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="role-permission" value="ai-monitoring">
+                            <span>AI监控</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="role-permission" value="categories">
+                            <span>分类管理</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="role-permission" value="rewards">
+                            <span>积分奖励</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="role-permission" value="leaderboard">
+                            <span>排行榜</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="role-permission" value="activities">
+                            <span>活动管理</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="role-permission" value="news">
+                            <span>资讯管理</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="role-permission" value="users">
+                            <span>用户管理</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="role-permission" value="logs">
+                            <span>操作日志</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" class="role-permission" value="settings">
+                            <span>系统设置</span>
+                        </label>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary w-full py-2 rounded-lg">添加角色</button>
+            </form>
+        `;
+        
+        const roleForm = document.getElementById('role-form');
+        roleForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const roleName = document.getElementById('role-name').value;
+            const permissions = Array.from(document.querySelectorAll('.role-permission:checked')).map(cb => cb.value);
+            
+            Toast.show(`角色 ${roleName} 创建成功，权限：${permissions.join(', ')}`, 'success');
+            roleForm.reset();
+        });
+    }
+}
+
+// New functions for smart features
+
+function populateDevices() {
+    const devices = API.getDevices();
+    const tbody = document.getElementById('devices-tbody');
+    if (tbody) {
+        tbody.innerHTML = devices.map(device => `
+            <tr class="border-b dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200">
+                <td class="p-2 font-medium">${device.id}</td>
+                <td class="p-2">${device.name}</td>
+                <td class="p-2">${device.location.address}</td>
+                <td class="p-2">
+                    <span class="status-badge ${device.status}">
+                        ${device.status === 'normal' ? '正常' : 
+                          device.status === 'warning' ? '需要清理' : 
+                          device.status === 'error' ? '故障' : '离线'}
+                    </span>
+                </td>
+                <td class="p-2">
+                    <div class="flex items-center space-x-2">
+                        <div class="progress-bar flex-1">
+                            <div class="progress-bar-fill ${
+                                device.capacity.current < 50 ? 'low' : 
+                                device.capacity.current < 80 ? 'medium' : 'high'
+                            }" style="width: ${device.capacity.current}%"></div>
+                        </div>
+                        <span class="text-sm">${device.capacity.current}%</span>
+                    </div>
+                </td>
+                <td class="p-2">${device.temperature}°C</td>
+                <td class="p-2">
+                    <div class="flex items-center space-x-2">
+                        <div class="progress-bar flex-1">
+                            <div class="progress-bar-fill ${
+                                device.battery > 50 ? 'low' : 
+                                device.battery > 20 ? 'medium' : 'high'
+                            }" style="width: ${device.battery}%"></div>
+                        </div>
+                        <span class="text-sm">${device.battery}%</span>
+                    </div>
+                </td>
+                <td class="p-2 space-x-2">
+                    <button class="text-blue-500 hover:text-blue-700" onclick="viewDeviceDetails('${device.id}')">
+                        <i data-lucide="eye"></i>
+                    </button>
+                    <button class="text-green-500 hover:text-green-700" onclick="editDevice('${device.id}')">
+                        <i data-lucide="edit"></i>
+                    </button>
+                    <button class="text-red-500 hover:text-red-700" onclick="restartDevice('${device.id}')">
+                        <i data-lucide="refresh-cw"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+        
+        lucide.createIcons();
+        renderDeviceMap(devices);
+    }
+}
+
+function renderDeviceMap(devices) {
+    const mapContainer = document.getElementById('device-map');
+    if (mapContainer) {
+        mapContainer.innerHTML = `
+            <div class="device-map-container">
+                <svg width="100%" height="100%" viewBox="0 0 800 600" class="bg-blue-50 dark:bg-blue-900/30">
+                    <!-- Background grid -->
+                    <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+                        <path d="M 50 0 L 0 0 0 50" fill="none" stroke="rgba(79, 70, 229, 0.1)" stroke-width="1"/>
+                    </pattern>
+                    <rect width="800" height="600" fill="url(#grid)" />
+                    
+                    <!-- Main roads -->
+                    <path d="M 0 300 H 800" stroke="rgba(79, 70, 229, 0.3)" stroke-width="8" />
+                    <path d="M 400 0 V 600" stroke="rgba(79, 70, 229, 0.3)" stroke-width="8" />
+                    
+                    <!-- Secondary roads -->
+                    <path d="M 0 200 H 800" stroke="rgba(79, 70, 229, 0.2)" stroke-width="4" />
+                    <path d="M 0 400 H 800" stroke="rgba(79, 70, 229, 0.2)" stroke-width="4" />
+                    <path d="M 200 0 V 600" stroke="rgba(79, 70, 229, 0.2)" stroke-width="4" />
+                    <path d="M 600 0 V 600" stroke="rgba(79, 70, 229, 0.2)" stroke-width="4" />
+                    
+                    <!-- Device markers -->
+                    ${devices.map(device => {
+                        const x = ((device.location.lng - 116.35) / 0.1) * 800;
+                        const y = ((39.95 - device.location.lat) / 0.1) * 600;
+                        return `
+                            <circle 
+                                cx="${x}" 
+                                cy="${y}" 
+                                r="6" 
+                                class="device-marker ${device.status}"
+                                data-device-id="${device.id}"
+                                onclick="showDeviceTooltip(event, '${device.id}')"
+                            />
+                        `;
+                    }).join('')}
+                </svg>
+            </div>
+        `;
+    }
+}
+
+function populateAnalytics() {
+    const analyticsData = API.getAnalyticsData();
+    
+    // Monthly trend chart
+    const monthlyTrendCtx = document.getElementById('monthly-trend-chart');
+    if (monthlyTrendCtx) {
+        new Chart(monthlyTrendCtx, {
+            type: 'line',
+            data: {
+                labels: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                datasets: [{
+                    label: '投递量',
+                    data: analyticsData.monthlyTrend,
+                    borderColor: 'var(--primary-color)',
+                    backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+    }
+    
+    // Accuracy chart
+    const accuracyCtx = document.getElementById('accuracy-chart');
+    if (accuracyCtx) {
+        new Chart(accuracyCtx, {
+            type: 'line',
+            data: {
+                labels: ['1月', '2月', '3月', '4月', '5月', '6月'],
+                datasets: [{
+                    label: '分类准确率 (%)',
+                    data: analyticsData.accuracy,
+                    borderColor: 'var(--success-color)',
+                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        min: 90,
+                        max: 100
+                    }
+                }
+            }
+        });
+    }
+    
+    // User activity chart
+    const userActivityCtx = document.getElementById('user-activity-chart');
+    if (userActivityCtx) {
+        new Chart(userActivityCtx, {
+            type: 'bar',
+            data: {
+                labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                datasets: [{
+                    label: '活跃用户数',
+                    data: analyticsData.userActivity,
+                    backgroundColor: 'var(--secondary-color)'
+                }]
+            },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+    }
+    
+    // Device efficiency chart
+    const deviceEfficiencyCtx = document.getElementById('device-efficiency-chart');
+    if (deviceEfficiencyCtx) {
+        const topDevices = analyticsData.deviceEfficiency
+            .sort((a, b) => b.efficiency - a.efficiency)
+            .slice(0, 10);
+            
+        new Chart(deviceEfficiencyCtx, {
+            type: 'bar',
+            data: {
+                labels: topDevices.map(d => d.id),
+                datasets: [{
+                    label: '使用效率 (%)',
+                    data: topDevices.map(d => d.efficiency),
+                    backgroundColor: 'var(--accent-color)'
+                }]
+            },
+            options: { 
+                responsive: true, 
+                maintainAspectRatio: false,
+                indexAxis: 'y'
+            }
+        });
+    }
+}
+
+function populateOperations() {
+    // Populate tasks
+    const tasksList = document.getElementById('tasks-list');
+    if (tasksList) {
+        const tasks = API.getTasks();
+        tasksList.innerHTML = tasks.map(task => `
+            <li class="p-3 border rounded-lg flex items-center justify-between hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200">
+                <div class="flex items-center space-x-3">
+                    <span class="w-2 h-2 rounded-full ${
+                        task.priority === 'urgent' ? 'bg-red-500' : 
+                        task.priority === 'high' ? 'bg-orange-500' : 'bg-yellow-500'
+                    }"></span>
+                    <div>
+                        <p class="font-medium">${task.title}</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">设备: ${task.deviceId}</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="text-xs px-2 py-1 rounded-full ${
+                        task.status === 'pending' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300' :
+                        task.status === 'in-progress' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300' :
+                        'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
+                    }">${
+                        task.status === 'pending' ? '待处理' :
+                        task.status === 'in-progress' ? '处理中' : '已完成'
+                    }</span>
+                    <button class="text-blue-500 hover:text-blue-700" onclick="startTask('${task.id}')">
+                        <i data-lucide="play"></i>
+                    </button>
+                    <button class="text-green-500 hover:text-green-700" onclick="completeTask('${task.id}')">
+                        <i data-lucide="check"></i>
+                    </button>
+                </div>
+            </li>
+        `).join('');
+        lucide.createIcons();
+    }
+    
+    // Populate maintenance schedule
+    const maintenanceSchedule = document.getElementById('maintenance-schedule');
+    if (maintenanceSchedule) {
+        const schedule = API.getMaintenanceSchedule();
+        maintenanceSchedule.innerHTML = `
+            <div class="space-y-3">
+                ${schedule.map(item => `
+                    <div class="p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-200">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="font-medium">${item.deviceId}</span>
+                            <span class="text-sm text-gray-500 dark:text-gray-400">${item.date}</span>
+                        </div>
+                        <p class="text-sm">${item.type}</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">技术员: ${item.technician}</p>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+}
+
+function populateAIMonitoring() {
+    // Populate AI alerts
+    const aiAlertsContainer = document.getElementById('ai-alerts');
+    if (aiAlertsContainer) {
+        const alerts = API.getAIAlerts();
+        aiAlertsContainer.innerHTML = alerts.map(alert => `
+            <div class="ai-alert-card p-4 rounded-lg border bg-white dark:bg-gray-800">
+                <div class="flex justify-between items-start mb-2">
+                    <div>
+                        <h4 class="font-bold text-lg">${alert.type}</h4>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">${alert.deviceName} - ${alert.timestamp}</p>
+                    </div>
+                    <span class="text-xs px-2 py-1 rounded-full ${
+                        alert.status === 'pending' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300' :
+                        'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
+                    }">${alert.status === 'pending' ? '待处理' : '已处理'}</span>
+                </div>
+                <p class="mb-3">${alert.description}</p>
+                <div class="ai-suggestion mb-3">
+                    <p class="text-sm font-medium text-purple-600 dark:text-purple-400">AI建议:</p>
+                    <p class="text-sm">${alert.suggestion}</p>
+                </div>
+                ${alert.status === 'pending' ? `
+                    <button class="btn-primary text-sm px-3 py-1" onclick="processAlert('${alert.id}')">
+                        标记为已处理
+                    </button>
+                ` : ''}
+            </div>
+        `).join('');
+    }
+    
+    // Populate smart schedule
+    const smartScheduleContainer = document.getElementById('smart-schedule');
+    if (smartScheduleContainer) {
+        const schedule = API.getSmartSchedule();
+        smartScheduleContainer.innerHTML = `
+            <div class="space-y-4">
+                ${schedule.routes.map(route => `
+                    <div class="p-4 rounded-lg border bg-white dark:bg-gray-800">
+                        <div class="flex justify-between items-center mb-3">
+                            <h4 class="font-bold text-lg">${route.name}</h4>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-xs px-2 py-1 rounded-full ${
+                                    route.priority === 'high' ? 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300' :
+                                    route.priority === 'medium' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300' :
+                                    'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300'
+                                }">${
+                                    route.priority === 'high' ? '高优先级' :
+                                    route.priority === 'medium' ? '中优先级' : '低优先级'
+                                }</span>
+                                <span class="text-sm text-gray-500 dark:text-gray-400">⏱ ${route.estimatedTime}</span>
+                            </div>
+                        </div>
+                        <p class="text-sm mb-3">${route.reason}</p>
+                        <div class="mb-3">
+                            <p class="text-sm font-medium mb-1">涉及设备:</p>
+                            <div class="flex flex-wrap gap-2">
+                                ${route.devices.map(deviceId => `
+                                    <span class="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-full">${deviceId}</span>
+                                `).join('')}
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="btn-primary text-sm px-3 py-1">生成任务</button>
+                            <button class="btn-secondary text-sm px-3 py-1">导出路线</button>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+}
+
+// Device management functions
+function viewDeviceDetails(deviceId) {
+    const device = API.getDevice(deviceId);
+    if (device) {
+        Toast.show(`查看设备 ${device.name} 的详细信息`, 'info');
+        // Here you would typically show a detailed modal or navigate to a detail page
+    }
+}
+
+function editDevice(deviceId) {
+    const device = API.getDevice(deviceId);
+    if (device) {
+        Toast.show(`编辑设备 ${device.name}`, 'info');
+        // Here you would typically show an edit modal
+    }
+}
+
+function restartDevice(deviceId) {
+    ConfirmDialog.show(`确定要重启设备 ${deviceId} 吗？`, () => {
+        API.updateDeviceStatus(deviceId, 'restarting');
+        Toast.show(`设备 ${deviceId} 正在重启...`, 'success');
+        setTimeout(() => {
+            API.updateDeviceStatus(deviceId, 'normal');
+            populateDevices();
+            Toast.show(`设备 ${deviceId} 重启成功`, 'success');
+        }, 2000);
+    });
+}
+
+// Task management functions
+function startTask(taskId) {
+    API.updateTaskStatus(taskId, 'in-progress');
+    populateOperations();
+    Toast.show('任务已开始', 'success');
+}
+
+function completeTask(taskId) {
+    API.updateTaskStatus(taskId, 'completed');
+    populateOperations();
+    Toast.show('任务已完成', 'success');
+}
+
+// AI Alert management
+function processAlert(alertId) {
+    API.processAIAlert(alertId);
+    populateAIMonitoring();
+    Toast.show('告警已标记为已处理', 'success');
+}
+
+// Device tooltip
+function showDeviceTooltip(event, deviceId) {
+    const device = API.getDevice(deviceId);
+    if (device) {
+        // Create tooltip
+        let tooltip = document.getElementById('device-tooltip');
+        if (!tooltip) {
+            tooltip = document.createElement('div');
+            tooltip.id = 'device-tooltip';
+            tooltip.className = 'absolute bg-white dark:bg-gray-800 p-3 rounded-lg shadow-lg z-50 text-sm';
+            document.body.appendChild(tooltip);
+        }
+        
+        tooltip.innerHTML = `
+            <div class="font-bold">${device.name}</div>
+            <div class="text-gray-500 dark:text-gray-400">${device.id}</div>
+            <div class="mt-1">状态: <span class="font-medium">${
+                device.status === 'normal' ? '正常' : 
+                device.status === 'warning' ? '需要清理' : 
+                device.status === 'error' ? '故障' : '离线'
+            }</span></div>
+            <div>容量: ${device.capacity.current}%</div>
+            <div>电量: ${device.battery}%</div>
+        `;
+        
+        tooltip.style.left = event.pageX + 10 + 'px';
+        tooltip.style.top = event.pageY + 10 + 'px';
+        tooltip.style.display = 'block';
+        
+        // Hide tooltip when clicking elsewhere
+        document.addEventListener('click', hideDeviceTooltip);
+    }
+}
+
+function hideDeviceTooltip() {
+    const tooltip = document.getElementById('device-tooltip');
+    if (tooltip) {
+        tooltip.style.display = 'none';
+    }
+    document.removeEventListener('click', hideDeviceTooltip);
 }
 
 function populateLogs() {

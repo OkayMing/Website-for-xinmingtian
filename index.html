@@ -68,13 +68,30 @@
     <aside class="sidebar w-64 flex-shrink-0 p-4 space-y-4 bg-gray-800">
         <div class="text-white text-2xl font-bold flex items-center space-x-2 mb-8">
             <i data-lucide="trash-2"></i>
-            <span>垃圾分类管理</span>
+            <span>爱文闽垃圾回收箱</span>
         </div>
         <nav class="space-y-2">
             <a href="#" class="flex items-center space-x-2 p-2 rounded-lg active bg-gray-700" data-section="dashboard">
                 <i data-lucide="layout-dashboard"></i>
                 <span>数据概览</span>
             </a>
+            <a href="#" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700" data-section="devices">
+                <i data-lucide="monitor"></i>
+                <span>设备监控</span>
+            </a>
+            <a href="#" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700" data-section="analytics">
+                <i data-lucide="bar-chart-3"></i>
+                <span>数据分析</span>
+            </a>
+            <a href="#" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700" data-section="operations">
+                <i data-lucide="briefcase"></i>
+                <span>运营管理</span>
+            </a>
+            <a href="#" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700" data-section="ai-monitoring">
+                <i data-lucide="brain"></i>
+                <span>AI监控</span>
+            </a>
+            <div class="border-t border-gray-700 my-2"></div>
             <a href="#" class="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-700" data-section="categories">
                 <i data-lucide="layers"></i>
                 <span>分类管理</span>
@@ -185,6 +202,196 @@
                     <div style="height: 300px;">
                         <canvas id="category-chart"></canvas>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Devices Section -->
+        <section id="devices-section" class="hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-6">
+                <div class="card p-6 rounded-xl shadow-md flex items-center space-x-4">
+                    <div class="bg-green-100 dark:bg-green-900 p-3 rounded-full">
+                        <i data-lucide="check-circle" class="text-green-500"></i>
+                    </div>
+                    <div>
+                        <p class="text-gray-500 dark:text-gray-400">正常运行</p>
+                        <p class="text-2xl font-bold">45</p>
+                    </div>
+                </div>
+                <div class="card p-6 rounded-xl shadow-md flex items-center space-x-4">
+                    <div class="bg-yellow-100 dark:bg-yellow-900 p-3 rounded-full">
+                        <i data-lucide="alert-triangle" class="text-yellow-500"></i>
+                    </div>
+                    <div>
+                        <p class="text-gray-500 dark:text-gray-400">需要清理</p>
+                        <p class="text-2xl font-bold">8</p>
+                    </div>
+                </div>
+                <div class="card p-6 rounded-xl shadow-md flex items-center space-x-4">
+                    <div class="bg-red-100 dark:bg-red-900 p-3 rounded-full">
+                        <i data-lucide="x-circle" class="text-red-500"></i>
+                    </div>
+                    <div>
+                        <p class="text-gray-500 dark:text-gray-400">故障设备</p>
+                        <p class="text-2xl font-bold">2</p>
+                    </div>
+                </div>
+                <div class="card p-6 rounded-xl shadow-md flex items-center space-x-4">
+                    <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-full">
+                        <i data-lucide="wifi-off" class="text-gray-500"></i>
+                    </div>
+                    <div>
+                        <p class="text-gray-500 dark:text-gray-400">离线设备</p>
+                        <p class="text-2xl font-bold">1</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Device Map -->
+            <div class="card p-6 rounded-xl shadow-md mb-6">
+                <h2 class="text-xl font-bold mb-4">设备分布</h2>
+                <div id="device-map" class="w-full h-96 bg-gray-100 dark:bg-gray-800 rounded-lg relative overflow-hidden">
+                    <!-- Map will be rendered here -->
+                </div>
+            </div>
+
+            <!-- Device List -->
+            <div class="card p-6 rounded-xl shadow-md">
+                <h2 class="text-xl font-bold mb-4">设备列表</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left min-w-[800px]">
+                        <thead>
+                            <tr class="border-b dark:border-gray-700">
+                                <th class="p-2">设备ID</th>
+                                <th class="p-2">设备名称</th>
+                                <th class="p-2">位置</th>
+                                <th class="p-2">状态</th>
+                                <th class="p-2">容量</th>
+                                <th class="p-2">温度</th>
+                                <th class="p-2">电量</th>
+                                <th class="p-2">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="devices-tbody">
+                            <!-- Device data will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analytics Section -->
+        <section id="analytics-section" class="hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <div class="card p-6 rounded-xl shadow-md">
+                    <h2 class="text-xl font-bold mb-4">月度投递趋势</h2>
+                    <div style="height: 300px;">
+                        <canvas id="monthly-trend-chart"></canvas>
+                    </div>
+                </div>
+                <div class="card p-6 rounded-xl shadow-md">
+                    <h2 class="text-xl font-bold mb-4">分类准确率分析</h2>
+                    <div style="height: 300px;">
+                        <canvas id="accuracy-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <div class="card p-6 rounded-xl shadow-md">
+                    <h2 class="text-xl font-bold mb-4">用户活跃度分布</h2>
+                    <div style="height: 300px;">
+                        <canvas id="user-activity-chart"></canvas>
+                    </div>
+                </div>
+                <div class="card p-6 rounded-xl shadow-md">
+                    <h2 class="text-xl font-bold mb-4">设备使用效率</h2>
+                    <div style="height: 300px;">
+                        <canvas id="device-efficiency-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Operations Section -->
+        <section id="operations-section" class="hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <div class="card p-6 rounded-xl shadow-md">
+                    <h2 class="text-xl font-bold mb-4">今日任务</h2>
+                    <ul class="space-y-4" id="tasks-list">
+                        <!-- Tasks will be populated here -->
+                    </ul>
+                </div>
+                <div class="card p-6 rounded-xl shadow-md">
+                    <h2 class="text-xl font-bold mb-4">维护计划</h2>
+                    <div id="maintenance-schedule">
+                        <!-- Maintenance schedule will be populated here -->
+                    </div>
+                </div>
+                <div class="card p-6 rounded-xl shadow-md">
+                    <h2 class="text-xl font-bold mb-4">运营概览</h2>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400">今日投递</p>
+                            <p class="text-2xl font-bold">1,234</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400">活跃设备</p>
+                            <p class="text-2xl font-bold">54/56</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 dark:text-gray-400">待处理告警</p>
+                            <p class="text-2xl font-bold text-red-500">3</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Monitoring Section -->
+        <section id="ai-monitoring-section" class="hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                <div class="card p-6 rounded-xl shadow-md flex items-center space-x-4">
+                    <div class="bg-purple-100 dark:bg-purple-900 p-3 rounded-full">
+                        <i data-lucide="brain" class="text-purple-500"></i>
+                    </div>
+                    <div>
+                        <p class="text-gray-500 dark:text-gray-400">AI识别准确率</p>
+                        <p class="text-2xl font-bold">98.5%</p>
+                    </div>
+                </div>
+                <div class="card p-6 rounded-xl shadow-md flex items-center space-x-4">
+                    <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-full">
+                        <i data-lucide="alert-circle" class="text-blue-500"></i>
+                    </div>
+                    <div>
+                        <p class="text-gray-500 dark:text-gray-400">今日识别错误</p>
+                        <p class="text-2xl font-bold">23</p>
+                    </div>
+                </div>
+                <div class="card p-6 rounded-xl shadow-md flex items-center space-x-4">
+                    <div class="bg-green-100 dark:bg-green-900 p-3 rounded-full">
+                        <i data-lucide="check-circle" class="text-green-500"></i>
+                    </div>
+                    <div>
+                        <p class="text-gray-500 dark:text-gray-400">用户采纳建议</p>
+                        <p class="text-2xl font-bold">85%</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Alerts -->
+            <div class="card p-6 rounded-xl shadow-md mb-6">
+                <h2 class="text-xl font-bold mb-4">实时AI告警</h2>
+                <div class="space-y-4" id="ai-alerts">
+                    <!-- AI alerts will be populated here -->
+                </div>
+            </div>
+
+            <!-- Smart Scheduling -->
+            <div class="card p-6 rounded-xl shadow-md">
+                <h2 class="text-xl font-bold mb-4">智能调度建议</h2>
+                <div id="smart-schedule">
+                    <!-- Smart scheduling content will be populated here -->
                 </div>
             </div>
         </section>

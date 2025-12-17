@@ -1,4 +1,4 @@
-// Mock API for Garbage Sorting Backend
+// Mock API for Smart Garbage Collection System
 const API = (() => {
     // In-memory data storage
     let categories = [
@@ -24,6 +24,55 @@ const API = (() => {
         { id: 1, username: 'admin', email: 'admin@example.com', registered: '2024-01-01', status: '活跃' },
         { id: 2, username: 'user1', email: 'user1@example.com', registered: '2024-02-01', status: '活跃' },
     ];
+    
+    // New data models for smart features
+    let devices = Array.from({ length: 56 }, (_, i) => ({
+        id: `DEV${String(i + 1).padStart(3, '0')}`,
+        name: `智能回收箱 ${i + 1}`,
+        location: {
+            lat: 39.9042 + (Math.random() - 0.5) * 0.1,
+            lng: 116.4074 + (Math.random() - 0.5) * 0.1,
+            address: `北京市朝阳区某某街道${i + 1}号`
+        },
+        status: ['normal', 'warning', 'error', 'offline'][Math.floor(Math.random() * 4)],
+        capacity: {
+            total: 100,
+            current: Math.floor(Math.random() * 100)
+        },
+        temperature: 25 + Math.floor(Math.random() * 10),
+        lastMaintenance: new Date(Date.now() - Math.random() * 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+        battery: 100 - Math.floor(Math.random() * 30),
+        categories: [
+            { type: '可回收物', capacity: 25, current: Math.floor(Math.random() * 25) },
+            { type: '厨余垃圾', capacity: 25, current: Math.floor(Math.random() * 25) },
+            { type: '有害垃圾', capacity: 25, current: Math.floor(Math.random() * 25) },
+            { type: '其他垃圾', capacity: 25, current: Math.floor(Math.random() * 25) }
+        ]
+    }));
+
+    let aiAlerts = Array.from({ length: 10 }, (_, i) => ({
+        id: i + 1,
+        deviceId: `DEV${String(Math.floor(Math.random() * 56) + 1).padStart(3, '0')}`,
+        deviceName: `智能回收箱 ${Math.floor(Math.random() * 56) + 1}`,
+        timestamp: new Date(Date.now() - i * 600000).toLocaleString(),
+        type: ['错误投递', '满溢预警', '温度异常', '电池低电量'][Math.floor(Math.random() * 4)],
+        description: '检测到用户错误投递塑料瓶到厨余垃圾通道',
+        suggestion: '建议引导用户正确分类，塑料瓶应投递到可回收物通道',
+        status: ['pending', 'processed'][Math.floor(Math.random() * 2)]
+    }));
+
+    let tasks = [
+        { id: 1, title: '清理满溢设备', deviceId: 'DEV001', status: 'pending', priority: 'high' },
+        { id: 2, title: '修复故障设备', deviceId: 'DEV015', status: 'pending', priority: 'urgent' },
+        { id: 3, title: '例行维护', deviceId: 'DEV023', status: 'scheduled', priority: 'medium' },
+        { id: 4, title: '电池更换', deviceId: 'DEV045', status: 'pending', priority: 'medium' }
+    ];
+
+    let maintenanceSchedule = [
+        { id: 1, deviceId: 'DEV001', date: '2024-12-20', technician: '张师傅', type: '例行保养' },
+        { id: 2, deviceId: 'DEV002', date: '2024-12-21', technician: '李师傅', type: '故障维修' },
+        { id: 3, deviceId: 'DEV003', date: '2024-12-22', technician: '王师傅', type: '升级固件' }
+    ];
 
     return {
         getDashboardData: () => {
@@ -33,7 +82,85 @@ const API = (() => {
                 totalPoints: 89012,
                 wrongDeliveries: 123,
                 trend: [120, 190, 300, 500, 200, 300, 450],
-                categories: [300, 50, 100, 80]
+                categories: [300, 50, 100, 80],
+                deviceStats: {
+                    normal: devices.filter(d => d.status === 'normal').length,
+                    warning: devices.filter(d => d.status === 'warning').length,
+                    error: devices.filter(d => d.status === 'error').length,
+                    offline: devices.filter(d => d.status === 'offline').length
+                }
+            };
+        },
+        
+        // Device-related APIs
+        getDevices: () => devices,
+        getDevice: (id) => devices.find(d => d.id === id),
+        updateDeviceStatus: (id, status) => {
+            const device = devices.find(d => d.id === id);
+            if (device) {
+                device.status = status;
+                return device;
+            }
+            return null;
+        },
+        
+        // AI Monitoring APIs
+        getAIAlerts: () => aiAlerts,
+        processAIAlert: (id) => {
+            const alert = aiAlerts.find(a => a.id === id);
+            if (alert) {
+                alert.status = 'processed';
+                return alert;
+            }
+            return null;
+        },
+        
+        // Operations APIs
+        getTasks: () => tasks,
+        updateTaskStatus: (id, status) => {
+            const task = tasks.find(t => t.id === id);
+            if (task) {
+                task.status = status;
+                return task;
+            }
+            return null;
+        },
+        getMaintenanceSchedule: () => maintenanceSchedule,
+        
+        // Analytics APIs
+        getAnalyticsData: () => {
+            return {
+                monthlyTrend: [1200, 1900, 3000, 5000, 2000, 3000, 4500, 5200, 4800, 5600, 6200, 7000],
+                accuracy: [95.2, 96.1, 97.3, 98.0, 98.5, 99.1],
+                userActivity: [1200, 1500, 1800, 2100, 2500, 2800, 3200],
+                deviceEfficiency: devices.map(d => ({
+                    id: d.id,
+                    efficiency: Math.random() * 30 + 70
+                }))
+            };
+        },
+        
+        // Smart scheduling
+        getSmartSchedule: () => {
+            return {
+                routes: [
+                    {
+                        id: 1,
+                        name: '东区路线',
+                        devices: ['DEV001', 'DEV002', 'DEV003', 'DEV004', 'DEV005'],
+                        estimatedTime: '2小时',
+                        priority: 'high',
+                        reason: '多台设备满溢预警'
+                    },
+                    {
+                        id: 2,
+                        name: '西区路线',
+                        devices: ['DEV010', 'DEV011', 'DEV012'],
+                        estimatedTime: '1.5小时',
+                        priority: 'medium',
+                        reason: '例行清理'
+                    }
+                ]
             };
         },
         getCategories: () => categories,
@@ -51,7 +178,7 @@ const API = (() => {
         getCategory: (id) => categories.find(c => c.id == id),
         getReward: (id) => rewards.find(r => r.id == id),
         getActivity: (id) => activities.find(a => a.id == id),
-        getNews: (id) => news.find(n => n.id == id),
+        getNewsItem: (id) => news.find(n => n.id == id),
         getUser: (id) => users.find(u => u.id == id),
 
         // Create
